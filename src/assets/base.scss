@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -33,7 +34,25 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
+  --color-akcent: hsla(160, 100%, 37%, 1);
+  --color-akcent-inside: var(--vt-c-white);
+  --color-akcent-soft: hsl(160, 96%, 31%);
+
   --section-gap: 160px;
+
+  --amplify-components-authenticator-router-background-color: var(--color-background-mute);
+  --amplify-components-heading-color: var(--color-akcent);
+  --amplify-components-fieldcontrol-color: var(--vt-c-white);
+  --amplify-components-button-color: var(--vt-c-white);
+  --amplify-components-field-label-color: var(--color-akcent);
+  --amplify-components-button-primary-background-color: var(--color-akcent);
+  --amplify-components-button-primary-hover-background-color: var(--color-akcent-soft);
+  --amplify-components-tabs-item-active-color: var(--vt-c-white);
+  --amplify-components-tabs-item-active-border-color: var(--vt-c-white);
+  --amplify-components-authenticator-state-inactive-background-color: var(--vt-c-black);
+  --amplify-components-tabs-item-color: var(--vt-c-text-dark-2);
+  --amplify-components-tabs-item-hover-color: var(--vt-c-white);
+  --amplify-components-tabs-item-focus-color: var(--vt-c-white);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -65,10 +84,14 @@ body {
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+html, body {
+  font-size: 14px;
+}
+
+

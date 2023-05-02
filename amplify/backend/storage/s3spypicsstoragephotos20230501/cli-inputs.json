@@ -1,0 +1,15 @@
+{
+  "resourceName": "s3spypicsstoragephotos20230501",
+  "bucketName": "spypics-storage-photos-2023-0501",
+  "policyUUID": "23087729",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ],
+  "triggerFunction": "createThumbnail"
+}

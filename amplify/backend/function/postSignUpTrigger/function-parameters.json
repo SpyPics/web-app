@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "auth": {
+      "SpyPics": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "spypics": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

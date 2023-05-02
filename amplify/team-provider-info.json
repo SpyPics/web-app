@@ -1,0 +1,36 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-spypics-staging-185830-authRole",
+      "UnauthRoleArn": "arn:aws:iam::576003895044:role/amplify-spypics-staging-185830-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::576003895044:role/amplify-spypics-staging-185830-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-spypics-staging-185830-deployment",
+      "UnauthRoleName": "amplify-spypics-staging-185830-unauthRole",
+      "StackName": "amplify-spypics-staging-185830",
+      "StackId": "arn:aws:cloudformation:eu-north-1:576003895044:stack/amplify-spypics-staging-185830/2a3b3900-e852-11ed-8527-0ea0dee6dd62",
+      "AmplifyAppId": "d1hui3t4iqlkmx"
+    },
+    "categories": {
+      "auth": {
+        "SpyPics": {}
+      },
+      "function": {
+        "createThumbnail": {
+          "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
+          "s3Key": "amplify-builds/createThumbnail-4e75384d5a596c576642-build.zip"
+        },
+        "postSignUpTrigger": {
+          "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
+          "s3Key": "amplify-builds/postSignUpTrigger-3542497a776e52727650-build.zip"
+        }
+      },
+      "storage": {
+        "s3spypicsstoragephotos20230501": {}
+      },
+      "api": {
+        "spypics": {}
+      }
+    }
+  }
+}

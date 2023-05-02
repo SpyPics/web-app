@@ -1,0 +1,135 @@
+@import 'base.scss';
+
+#app {
+  background: var(--color-background);
+  max-width: 1000px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  font-weight: normal;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 64px 1fr 64px;
+  gap: 0 0;
+  grid-template-areas:
+      "header-area"
+      "content-area"
+      "footer-area";
+  border-style: solid;
+  border-color: var(--color-border);
+  border-width: 0 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+h1, h2, h3, h4, button {
+  font-family: 'Poppins', sans-serif;
+}
+
+button {
+  text-transform: uppercase;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.green {
+  text-decoration: none;
+  color: var(--color-akcent);
+  transition: 0.4s;
+}
+
+.section-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+
+  > h2 {
+    color: var(--vt-c-white);
+    margin-right: auto;
+  }
+
+  > a {
+    display: inline-flex;
+    padding: 10px 15px;
+  }
+}
+
+.btn {
+  background-color: var(--color-akcent);
+  color: var(--color-akcent-inside);
+
+  &:hover {
+    background-color: var(--color-akcent-soft);
+  }
+}
+
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(#000, .75);
+  top: 0;
+  left: 0;
+
+  > .modal-content {
+    min-height: 100vh;
+    margin: 0;
+    width: 100%;
+    background-color: var(--color-background-soft);
+    display: flex;
+    flex-direction: column;
+
+    > header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--vt-c-white);
+      padding-left: 15px;
+
+      > h3 {
+
+      }
+
+      > button:last-child {
+        background-color: transparent;
+        height: 64px;
+        width: 64px;
+        border-style: solid;
+        border-color: var(--color-border);
+        border-width: 0 0 0 1px;
+        color: var(--vt-c-white);
+        padding: 0;
+        cursor: pointer;
+
+        > i {
+          font-size: 36px;
+        }
+
+        &:hover {
+          color: var(--color-akcent);
+        }
+      }
+    }
+  }
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: transform .5s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  transform: translateX(100%);
+}
