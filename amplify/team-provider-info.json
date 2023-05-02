@@ -18,7 +18,7 @@
       "function": {
         "createThumbnail": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
-          "s3Key": "amplify-builds/createThumbnail-6a714637413477617a56-build.zip"
+          "s3Key": "amplify-builds/createThumbnail-34583349433771526954-build.zip"
         },
         "postSignUpTrigger": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
@@ -27,6 +27,9 @@
       },
       "storage": {
         "s3spypicsstoragephotos20230501": {}
+      },
+      "api": {
+        "spypics": {}
       }
     }
   }

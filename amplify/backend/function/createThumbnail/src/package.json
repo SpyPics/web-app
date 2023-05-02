@@ -6,14 +6,13 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "preinstall": "npm install --arch=x64 --platform=linux --libc=glibc sharp"
+    "preinstall": "npm install --no-save --arch=x64 --platform=linux --libc=glibc sharp"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
   },
   "dependencies": {
     "aws-sdk": "^2.1369.0",
-    "node-fetch": "^3.3.1",
-    "sharp": "^0.32.1"
+    "node-fetch": "^3.3.1"
   }
 }
