@@ -5,6 +5,9 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "type": "module",
+  "scripts": {
+    "preinstall": "npm install --arch=x64 --platform=linux --libc=glibc sharp"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
   },

@@ -30,9 +30,6 @@ export const onCreatePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -65,9 +62,6 @@ export const onUpdatePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -100,9 +94,6 @@ export const onDeletePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -141,19 +132,12 @@ export const onCreateUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         nextToken
-        startedAt
       }
       bank_number
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -192,19 +176,12 @@ export const onUpdateUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         nextToken
-        startedAt
       }
       bank_number
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;
@@ -243,19 +220,12 @@ export const onDeleteUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          _version
-          _deleted
-          _lastChangedAt
         }
         nextToken
-        startedAt
       }
       bank_number
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
   }
 `;

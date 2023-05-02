@@ -18,10 +18,6 @@
         "cognitoUserPoolId": "authSpyPics"
       }
     ],
-    "conflictResolution": {
-      "defaultResolutionStrategy": {
-        "type": "AUTOMERGE"
-      }
-    }
+    "conflictResolution": {}
   }
 }
