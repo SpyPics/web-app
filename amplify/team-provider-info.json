@@ -27,9 +27,6 @@
       },
       "storage": {
         "s3spypicsstoragephotos20230501": {}
-      },
-      "api": {
-        "spypics": {}
       }
     }
   }
