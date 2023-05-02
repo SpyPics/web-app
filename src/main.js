@@ -9,7 +9,7 @@ import './assets/main.scss';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 
-Amplify.configure(awsExports);
+Amplify.configure({ ...awsExports, ssr: true });
 
 const app = createApp(App);
 
