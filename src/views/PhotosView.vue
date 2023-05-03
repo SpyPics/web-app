@@ -4,6 +4,7 @@ import { onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import { usePhotosStore } from '@/stores/photos';
 import awsExports from '@/aws-exports';
+import PhotoCardComponent from '@/components/PhotoCardComponent.vue';
 
 const bucketURL = `https://${awsExports.aws_user_files_s3_bucket}.s3.${awsExports.aws_user_files_s3_bucket_region}.amazonaws.com`;
 
@@ -26,7 +27,7 @@ function getThumbnail(uuid) {
 </script>
 
 <template>
-  <nav class="section-nav">
+  <nav class="view-nav">
     <h2>
       Photos
     </h2>
@@ -39,12 +40,19 @@ function getThumbnail(uuid) {
     </RouterLink>
   </nav>
 
-  <main>
-    <div v-for="item of store.photos">
-      {{ item.id }}
-      <img :src="getThumbnail(item.id)">
-    </div>
+  <main class="view-content">
+    <PhotoCardComponent v-for="item of store.photos" :photo="item">
+    </PhotoCardComponent>
   </main>
 
   <RouterView/>
 </template>
+
+<style scoped lang="scss">
+main {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: max-content;
+}
+</style>

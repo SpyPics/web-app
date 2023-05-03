@@ -1,8 +1,10 @@
 import { nextTick } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
 import ProfileView from '../views/ProfileView.vue';
 import PhotoFormModal from '@/components/PhotoFormModal.vue';
+import LoginComponent from '@/components/LoginComponent.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,7 +66,36 @@ const router = createRouter({
       },
       component: ProfileView
     },
+    {
+      path: '/login',
+      name: 'login',
+      meta: {},
+      component: LoginComponent
+    }
   ]
+});
+
+function getUser() {
+  return Auth.currentAuthenticatedUser().then((data) => {
+    return data;
+  }).catch(() => {
+    return false;
+  });
+}
+
+router.beforeEach(async (to, from) => {
+  if (to.path === '/') {
+    return true;
+  }
+
+  const user = await getUser();
+  if (to.path !== '/login' && !user) {
+    return '/login';
+  }
+
+  if (to.path === '/login' && user) {
+    return '/photos';
+  }
 });
 
 router.afterEach((to, from) => {

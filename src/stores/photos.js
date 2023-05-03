@@ -68,7 +68,7 @@ export const usePhotosStore = defineStore('photos', {
         // }
       });
 
-      this.photos = response.data.listPhotos.items.filter(i => !i._deleted).sort((a, b) => (a.createdAt > b.createdAt) ? 1 : -1);
+      this.photos = response.data.listPhotos.items.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     }
   },
 });

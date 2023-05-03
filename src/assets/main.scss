@@ -3,7 +3,7 @@
 #app {
   background: var(--color-background);
   max-width: 1000px;
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   padding: 0;
   font-weight: normal;
@@ -45,11 +45,12 @@ button {
   transition: 0.4s;
 }
 
-.section-nav {
+.view-nav {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  padding: 0 10px;
 
   > h2 {
     color: var(--vt-c-white);
@@ -60,6 +61,12 @@ button {
     display: inline-flex;
     padding: 10px 15px;
   }
+}
+
+.view-content {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 0 10px;
 }
 
 .btn {
@@ -122,6 +129,11 @@ button {
       }
     }
   }
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-enter-active,

@@ -1,30 +1,21 @@
 <script setup>
-import { watch } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
 import '@aws-amplify/ui-vue/styles.css';
 
 const auth = useAuthenticator();
-
-const services = {
-
-}
+const route = useRoute();
 
 </script>
 
 <template>
-  <authenticator variation="modal">
-    <!--    <template v-slot="{ user, signOut }">-->
-    <!--      <h1>Hello {{ user.username }}!</h1>-->
-    <!--      <button @click="signOut">Sign Out</button>-->
-    <!--    </template>-->
-  </authenticator>
+  <Authenticator variation="modal"></Authenticator>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg"/>
-
+    <!--    <h3>{{ route.path }}</h3>-->
     <div class="wrapper" v-if="auth.route === 'authenticated'">
-<!--      <h3>{{ auth.user?.attributes.email }}</h3>-->
-      <h3>{{ auth.user.username }}</h3>
+      <h3>{{ route.path }}</h3>
+      <!--      <h3>{{ auth.user.username }}</h3>-->
       <RouterLink class="route-item route-item--profile" to="/profile">
         <i class="material-symbols-rounded">
           account_box
@@ -81,9 +72,12 @@ header {
 
 main {
   grid-area: content-area;
-  overflow: auto;
-  padding: 15px 5px;
+  overflow: hidden;
+  padding: 15px 0 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .logo {
