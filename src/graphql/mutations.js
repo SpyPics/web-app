@@ -33,7 +33,6 @@ export const createPhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -69,7 +68,6 @@ export const updatePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -105,7 +103,6 @@ export const deletePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -147,7 +144,6 @@ export const createUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -195,7 +191,6 @@ export const updateUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -243,7 +238,6 @@ export const deleteUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }

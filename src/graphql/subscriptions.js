@@ -4,9 +4,9 @@
 export const onCreatePhoto = /* GraphQL */ `
   subscription OnCreatePhoto(
     $filter: ModelSubscriptionPhotoFilterInput
-    $owner: String
+    $user_id: String
   ) {
-    onCreatePhoto(filter: $filter, owner: $owner) {
+    onCreatePhoto(filter: $filter, user_id: $user_id) {
       id
       original {
         bucket
@@ -33,16 +33,15 @@ export const onCreatePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdatePhoto = /* GraphQL */ `
   subscription OnUpdatePhoto(
     $filter: ModelSubscriptionPhotoFilterInput
-    $owner: String
+    $user_id: String
   ) {
-    onUpdatePhoto(filter: $filter, owner: $owner) {
+    onUpdatePhoto(filter: $filter, user_id: $user_id) {
       id
       original {
         bucket
@@ -69,16 +68,15 @@ export const onUpdatePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeletePhoto = /* GraphQL */ `
   subscription OnDeletePhoto(
     $filter: ModelSubscriptionPhotoFilterInput
-    $owner: String
+    $user_id: String
   ) {
-    onDeletePhoto(filter: $filter, owner: $owner) {
+    onDeletePhoto(filter: $filter, user_id: $user_id) {
       id
       original {
         bucket
@@ -105,7 +103,6 @@ export const onDeletePhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -144,7 +141,6 @@ export const onCreateUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -189,7 +185,6 @@ export const onUpdateUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -234,7 +229,6 @@ export const onDeleteUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }

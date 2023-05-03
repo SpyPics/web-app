@@ -30,7 +30,6 @@ export const getPhoto = /* GraphQL */ `
       user_id
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -68,7 +67,6 @@ export const listPhotos = /* GraphQL */ `
         user_id
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -116,7 +114,6 @@ export const photosByUser_id = /* GraphQL */ `
         user_id
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -157,7 +154,6 @@ export const getUser = /* GraphQL */ `
           user_id
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
@@ -207,7 +203,6 @@ export const listUsers = /* GraphQL */ `
             user_id
             createdAt
             updatedAt
-            owner
           }
           nextToken
         }
