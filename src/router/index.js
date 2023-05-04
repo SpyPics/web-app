@@ -1,5 +1,5 @@
 import { nextTick } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
 import ProfileView from '../views/ProfileView.vue';
@@ -7,7 +7,7 @@ import PhotoFormModal from '@/components/PhotoFormModal.vue';
 import LoginComponent from '@/components/LoginComponent.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -31,21 +31,6 @@ const router = createRouter({
         title: 'Photos'
       },
       component: PhotosView,
-
-      // children: [
-      //   {
-      //     // UserProfile will be rendered inside User's <router-view>
-      //     // when /user/:id/profile is matched
-      //     path: 'profile',
-      //     component: UserProfile,
-      //   },
-      //   {
-      //     // UserPosts will be rendered inside User's <router-view>
-      //     // when /user/:id/posts is matched
-      //     path: 'posts',
-      //     component: UserPosts,
-      //   },
-      // ],
     },
     {
       path: '/store',
@@ -99,8 +84,6 @@ router.beforeEach(async (to, from) => {
 });
 
 router.afterEach((to, from) => {
-  // Use next tick to handle router history correctly
-  // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
   nextTick(() => {
     document.title = to.meta?.title || 'SpyPics';
   });
