@@ -142,7 +142,9 @@ export const handler = async (event) => {
       }
 
       let thumb = await createThumbnail(bucket, originalPhotoId + '.jpg', image.Body);
-      await updatePhotoRecord(originalPhotoId, thumb);
+      // Since the thumbnails are accessible publicly via url, there is no need to save them in the DB
+      // `${bucketURL}/public/thumbnails/${photo.id}.jpg`;
+      // await updatePhotoRecord(originalPhotoId, thumb);
       console.info(`SUCCESS, ${thumb.key}`);
       return event;
     } catch (error) {

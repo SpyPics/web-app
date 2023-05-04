@@ -6,10 +6,14 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-import { default as fetch, Request } from 'node-fetch';
+const { Sha256 } = require("@aws-crypto/sha256-js");
+const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+const { SignatureV4 } = require("@aws-sdk/signature-v4");
+const { HttpRequest } = require("@aws-sdk/protocol-http");
+const { default: fetch, Request } = require("node-fetch");
 
 const GRAPHQL_ENDPOINT = process.env.API_SPYPICS_GRAPHQLAPIENDPOINTOUTPUT;
-const GRAPHQL_API_KEY = process.env.API_SPYPICS_GRAPHQLAPIKEYOUTPUT;
+const AWS_REGION = process.env.REGION;
 
 const query = /* GraphQL */ `mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
@@ -18,7 +22,7 @@ const query = /* GraphQL */ `mutation CreateUser($input: CreateUserInput!) {
   }
 }`;
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
 
   if (event.request.userAttributes.email && event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
@@ -29,16 +33,28 @@ export const handler = async (event) => {
       }
     };
 
-    const options = {
+    const endpoint = new URL(GRAPHQL_ENDPOINT);
+
+    const signer = new SignatureV4({
+      credentials: defaultProvider(),
+      region: AWS_REGION,
+      service: 'appsync',
+      sha256: Sha256
+    });
+
+    const requestToBeSigned = new HttpRequest({
       method: 'POST',
       headers: {
-        'x-api-key': GRAPHQL_API_KEY,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        host: endpoint.host
       },
-      body: JSON.stringify({query, variables})
-    };
+      hostname: endpoint.host,
+      body: JSON.stringify({ query,variables }),
+      path: endpoint.pathname
+    });
 
-    const request = new Request(GRAPHQL_ENDPOINT, options);
+    const signed = await signer.sign(requestToBeSigned);
+    const request = new Request(GRAPHQL_ENDPOINT, signed);
     let statusCode = 200;
     let body;
     let response;

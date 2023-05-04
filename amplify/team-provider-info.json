@@ -18,11 +18,11 @@
       "function": {
         "createThumbnail": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
-          "s3Key": "amplify-builds/createThumbnail-34583349433771526954-build.zip"
+          "s3Key": "amplify-builds/createThumbnail-444c737841793052746b-build.zip"
         },
         "postSignUpTrigger": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
-          "s3Key": "amplify-builds/postSignUpTrigger-3542497a776e52727650-build.zip"
+          "s3Key": "amplify-builds/postSignUpTrigger-78636947717537693038-build.zip"
         }
       },
       "storage": {

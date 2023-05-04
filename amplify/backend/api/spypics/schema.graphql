@@ -1,7 +1,6 @@
-type Photo @model @auth(rules: [{allow: owner, ownerField: "user_id"}]) {
+type Photo @model @auth(rules: [{ allow: private, provider: iam }, {allow: owner, ownerField: "user_id"}]) {
   id: ID!
   original: S3Object!
-  thumbnail: S3Object
   description: String
   ready_for_sell: Boolean!
   price: Float
@@ -17,7 +16,7 @@ type Photo @model @auth(rules: [{allow: owner, ownerField: "user_id"}]) {
   user_id: ID! @index(name: "byUser")
 }
 
-type User @model @auth(rules: [{allow: owner, ownerField: "id"}]) {
+type User @model @auth(rules: [{ allow: private, provider: iam }, {allow: owner, ownerField: "id"}]) {
   id: ID!
   username: String!
   name: String

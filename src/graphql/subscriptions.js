@@ -13,11 +13,6 @@ export const onCreatePhoto = /* GraphQL */ `
         key
         region
       }
-      thumbnail {
-        bucket
-        key
-        region
-      }
       description
       ready_for_sell
       price
@@ -48,11 +43,6 @@ export const onUpdatePhoto = /* GraphQL */ `
         key
         region
       }
-      thumbnail {
-        bucket
-        key
-        region
-      }
       description
       ready_for_sell
       price
@@ -79,11 +69,6 @@ export const onDeletePhoto = /* GraphQL */ `
     onDeletePhoto(filter: $filter, user_id: $user_id) {
       id
       original {
-        bucket
-        key
-        region
-      }
-      thumbnail {
         bucket
         key
         region
@@ -120,11 +105,6 @@ export const onCreateUser = /* GraphQL */ `
         items {
           id
           original {
-            bucket
-            key
-            region
-          }
-          thumbnail {
             bucket
             key
             region
@@ -171,11 +151,6 @@ export const onUpdateUser = /* GraphQL */ `
             key
             region
           }
-          thumbnail {
-            bucket
-            key
-            region
-          }
           description
           ready_for_sell
           price
@@ -214,11 +189,6 @@ export const onDeleteUser = /* GraphQL */ `
         items {
           id
           original {
-            bucket
-            key
-            region
-          }
-          thumbnail {
             bucket
             key
             region

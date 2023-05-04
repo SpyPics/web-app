@@ -10,11 +10,6 @@ export const getPhoto = /* GraphQL */ `
         key
         region
       }
-      thumbnail {
-        bucket
-        key
-        region
-      }
       description
       ready_for_sell
       price
@@ -43,11 +38,6 @@ export const listPhotos = /* GraphQL */ `
       items {
         id
         original {
-          bucket
-          key
-          region
-        }
-        thumbnail {
           bucket
           key
           region
@@ -94,11 +84,6 @@ export const photosByUser_id = /* GraphQL */ `
           key
           region
         }
-        thumbnail {
-          bucket
-          key
-          region
-        }
         description
         ready_for_sell
         price
@@ -130,11 +115,6 @@ export const getUser = /* GraphQL */ `
         items {
           id
           original {
-            bucket
-            key
-            region
-          }
-          thumbnail {
             bucket
             key
             region
@@ -179,11 +159,6 @@ export const listUsers = /* GraphQL */ `
           items {
             id
             original {
-              bucket
-              key
-              region
-            }
-            thumbnail {
               bucket
               key
               region
