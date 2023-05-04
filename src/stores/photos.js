@@ -58,14 +58,7 @@ export const usePhotosStore = defineStore('photos', {
     },
     async fetchPhotos() {
       const response = await API.graphql({
-        query: listPhotosQuery,
-        // variables: {
-        //   filter: {
-        //     user_id: {
-        //       eq: auth.user.username
-        //     }
-        //   }
-        // }
+        query: listPhotosQuery
       });
 
       this.photos = response.data.listPhotos.items.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);

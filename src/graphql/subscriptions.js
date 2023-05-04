@@ -107,8 +107,11 @@ export const onDeletePhoto = /* GraphQL */ `
   }
 `;
 export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
-    onCreateUser(filter: $filter) {
+  subscription OnCreateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $id: String
+  ) {
+    onCreateUser(filter: $filter, id: $id) {
       id
       username
       name
@@ -151,8 +154,11 @@ export const onCreateUser = /* GraphQL */ `
   }
 `;
 export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
-    onUpdateUser(filter: $filter) {
+  subscription OnUpdateUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $id: String
+  ) {
+    onUpdateUser(filter: $filter, id: $id) {
       id
       username
       name
@@ -195,8 +201,11 @@ export const onUpdateUser = /* GraphQL */ `
   }
 `;
 export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
-    onDeleteUser(filter: $filter) {
+  subscription OnDeleteUser(
+    $filter: ModelSubscriptionUserFilterInput
+    $id: String
+  ) {
+    onDeleteUser(filter: $filter, id: $id) {
       id
       username
       name
