@@ -12,7 +12,6 @@
     "build:server:noExternal": "vite build --config vite.config.noexternal.js --ssr src/entry-server.js --outDir dist/server",
     "generate": "vite build --ssrManifest --outDir dist/static && npm run build:server && node prerender",
     "serve": "NODE_ENV=production node server",
-    "start": "NODE_ENV=production node server",
     "debug": "node --inspect-brk server"
   },
   "dependencies": {
