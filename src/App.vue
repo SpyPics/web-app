@@ -6,12 +6,15 @@ import '@aws-amplify/ui-vue/styles.css';
 const auth = useAuthenticator();
 const route = useRoute();
 
-function setHeight() {
-  document.body.style.height = `${window.innerHeight}px`;
-}
 
-window.addEventListener('resize', setHeight);
-setHeight();
+if (!import.meta.env.SSR) {
+  function setHeight() {
+    document.body.style.height = `${window.innerHeight}px`;
+  }
+
+  window.addEventListener('resize', setHeight);
+  setHeight();
+}
 </script>
 
 <template>

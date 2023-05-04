@@ -1,31 +1,34 @@
-import { createApp, nextTick } from 'vue';
+import { createSSRApp, nextTick } from 'vue';
 import { createPinia } from 'pinia';
-import { Amplify, Hub, Auth } from 'aws-amplify';
+import { Amplify, Hub } from 'aws-amplify';
+import App from './App.vue';
+import { createRouter } from './router';
+
+
 import awsExports from './aws-exports';
-
-Hub.listen('auth', (data) => {
-  const {payload} = data;
-
-  if (payload.event === 'signIn') {
-    nextTick(() => router.push({path: '/photos'}));
-  }
-
-  if (payload.event === 'signOut') {
-    nextTick(() => router.push({path: '/photos'}));
-  }
-});
-
 
 Amplify.configure({...awsExports, ssr: true});
 
-import App from './App.vue';
-import router from './router';
-
 import './assets/main.scss';
 
-const app = createApp(App);
+export function createApp(req) {
+  Hub.listen('auth', (data) => {
+    const {payload} = data;
 
-app.use(createPinia());
-app.use(router);
-app.mount('#app');
+    if (payload.event === 'signIn') {
+      nextTick(() => router.push({path: '/photos'}));
+    }
+
+    if (payload.event === 'signOut') {
+      nextTick(() => router.push({path: '/photos'}));
+    }
+  });
+
+  const app = createSSRApp(App);
+  const pinia = createPinia();
+  app.use(pinia);
+  const router = createRouter(req);
+  app.use(router);
+  return {app, router};
+}
 
