@@ -10,7 +10,6 @@ import { useAuthenticator } from '@aws-amplify/ui-vue';
 const auth = useAuthenticator();
 
 
-
 export const usePhotosStore = defineStore('photos', {
   state: () => {
     // const sub = API.graphql(
@@ -48,6 +47,7 @@ export const usePhotosStore = defineStore('photos', {
           region,
           bucket
         },
+        price: data.price,
         ready_for_sell: false
       };
 
@@ -58,8 +58,10 @@ export const usePhotosStore = defineStore('photos', {
           contentType: mimeType,
           metadata: {user_id: auth.user.username, photo_id: photoId}
         });
-        await API.graphql(graphqlOperation(createPhotoMutation, {input: inputData}));
-
+        const response = await API.graphql(graphqlOperation(createPhotoMutation, {input: inputData}));
+        if (response.data.createPhoto) {
+          this.photos.unshift(response.data.createPhoto);
+        }
         return Promise.resolve('success');
       } catch (error) {
         console.log('createPhoto error', error);
@@ -80,7 +82,7 @@ export const usePhotosStore = defineStore('photos', {
         this.activePhoto = response.data.updatePhoto;
 
         const found = this.photos.find(photo => photo.id === this.activePhoto.id);
-        if(found) {
+        if (found) {
           Object.assign(found, this.activePhoto);
         }
 

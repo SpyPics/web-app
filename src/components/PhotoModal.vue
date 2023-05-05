@@ -48,17 +48,15 @@ function setFile(file) {
   }
 }
 
-function save(event) {
+async function save(event) {
   event.preventDefault();
   if (formData.id) {
-    photosStore.updatePhoto(formData);
+    await photosStore.updatePhoto(formData);
   } else {
-    photosStore.createPhoto(formData);
+    await photosStore.createPhoto(formData);
   }
 
-  router.push({name: 'photos'});
-
-  return false;
+  await router.push({name: 'photos'});
 }
 </script>
 
