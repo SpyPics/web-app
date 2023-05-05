@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
 import '@aws-amplify/ui-vue/styles.css';
@@ -6,12 +7,20 @@ import '@aws-amplify/ui-vue/styles.css';
 const auth = useAuthenticator();
 const route = useRoute();
 
-function setHeight() {
-  document.body.style.height = `${window.innerHeight}px`;
-}
+const height = ref();
 
-window.addEventListener('resize', setHeight);
-setHeight();
+
+onMounted(() => {
+  const appElement = document.querySelector('#app');
+
+  function setHeight() {
+    appElement.style.height = `${window.innerHeight}px`;
+    height.value = window.innerHeight;
+  }
+
+  window.addEventListener('resize', setHeight);
+  setHeight();
+});
 </script>
 
 <template>
@@ -21,7 +30,8 @@ setHeight();
       <img alt="Vue logo" class="logo" src="@/assets/logo.png"/>
     </RouterLink>
     <div class="wrapper" v-if="auth.route === 'authenticated'">
-      <h3>{{ route.meta?.title }}</h3>
+      <h3>{{ height }}</h3>
+      <!--      <h3>{{ route.meta?.title }}</h3>-->
       <!--      <h3>{{ auth.user.attributes.email }}</h3>-->
       <!--      <h3>{{ auth.user.username }}</h3>-->
       <RouterLink class="route-item route-item--profile" to="/profile">
@@ -111,11 +121,12 @@ nav {
   align-items: center;
   font-weight: 400;
   text-transform: uppercase;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   justify-content: center;
   row-gap: 5px;
   height: 100%;
   font-size: .8rem;
+  width: 100%;
 
   &.router-link-exact-active {
     color: #fff;

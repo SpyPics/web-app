@@ -36,6 +36,11 @@ button {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
+  &:disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
 }
 
 input {
@@ -98,7 +103,8 @@ input {
   left: 0;
 
   > .modal-content {
-    min-height: 100vh;
+    //max-height: 100vh;
+    height: 100%;
     margin: 0;
     width: 100%;
     background-color: var(--color-background-soft);
@@ -154,6 +160,11 @@ input {
         }
       }
     }
+
+    > main {
+      overflow: auto;
+      flex: 1 1 auto;
+    }
   }
 }
 
@@ -164,10 +175,20 @@ input {
 
 .modal-enter-active,
 .modal-leave-active {
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .modal-enter-from,
 .modal-leave-to {
   transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

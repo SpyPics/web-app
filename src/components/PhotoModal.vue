@@ -15,7 +15,8 @@ const props = defineProps({
     type: String,
   }
 });
-
+const preview = ref();
+const loading = ref(false);
 const formData = reactive({
   file: null,
   price: 0.00,
@@ -25,7 +26,6 @@ const {activePhoto} = storeToRefs(photosStore);
 
 watch(activePhoto, (data) => {
   Object.assign(formData, data);
-  // console.log(formData);
 });
 
 
@@ -35,7 +35,6 @@ onBeforeMount(() => {
   }
 });
 
-const preview = ref();
 
 function setFile(file) {
   if (!file.target || !file.target.files[0]) {
@@ -50,12 +49,14 @@ function setFile(file) {
 
 async function save(event) {
   event.preventDefault();
+  loading.value = true;
   if (formData.id) {
     await photosStore.updatePhoto(formData);
   } else {
     await photosStore.createPhoto(formData);
   }
 
+  loading.value = false;
   await router.push({name: 'photos'});
 }
 </script>
@@ -70,13 +71,13 @@ async function save(event) {
         <h3>{{ formData.id ? 'Edit photo' : 'Add new photo' }}</h3>
 
         <div class="actions">
-          <button class="btn" type="submit">
+          <button class="btn" type="submit" :disabled="loading">
             Save
           </button>
         </div>
       </header>
 
-      <main class="">
+      <main>
         <label class="field field-photo">
           <img v-if="formData.id" class="preview" :src="$thumbnail(formData.id)">
           <template v-else>
@@ -88,10 +89,10 @@ async function save(event) {
 
         <label class="field field-price">
           <span>Price</span>
-          <div>
+          <span class="input">
             <i class="material-symbols-rounded">euro_symbol</i>
-            <input type="number" step="any" v-model="formData.price">
-          </div>
+            <input type="number" step="any" v-model="formData.price" placeholder="0.00">
+          </span>
         </label>
 
         <label class="field">
@@ -102,7 +103,6 @@ async function save(event) {
 
 
         <p>{{ formData.updatedAt }}</p>
-
       </main>
     </div>
   </form>
@@ -124,35 +124,39 @@ main {
   &.field-photo {
     align-items: stretch;
     border-radius: 12px;
-    background-color: #333;
+    background-color: #000;
     padding: 15px;
+    gap: 15px;
     margin: 0 auto;
+    width: 100%;
+    max-width: 512px;
 
     > input {
       opacity: 0;
       position: absolute;
+      visibility: hidden;
+      width: 100px;
     }
 
     > .preview {
       object-fit: contain;
       aspect-ratio: 1/1;
-      width: 512px;
-      max-width: 512px;
-      max-height: 512px;
+      width: 100%;
       border-radius: 6px;
-      margin-top: 15px;
     }
   }
 
   &.field-price {
-    > div {
+    > .input {
       display: flex;
       flex-direction: row;
       align-items: center;
+      overflow: hidden;
 
       > i {
         width: 50px;
         font-size: 3rem;
+        flex: 1 0 50px;
       }
 
       > input {
@@ -163,7 +167,11 @@ main {
         padding-left: 50px;
         margin-left: -50px;
         font-size: 3rem;
-        flex: 1 0 auto;
+        flex: 1 1 auto;
+
+        &::placeholder {
+          color: var(--vt-c-black-mute);
+        }
 
         &:focus {
           outline: none;

@@ -1,7 +1,10 @@
 import { createApp, nextTick } from 'vue';
 import { createPinia } from 'pinia';
-import { Amplify, Hub, Auth } from 'aws-amplify';
+import { Amplify, Hub } from 'aws-amplify';
 import awsExports from './aws-exports';
+import thumbnail from '@/plugins/thumbnail.js';
+import App from './App.vue';
+import router from './router';
 
 Hub.listen('auth', (data) => {
   const {payload} = data;
@@ -18,22 +21,15 @@ Hub.listen('auth', (data) => {
 
 Amplify.configure({...awsExports, ssr: true});
 
-import App from './App.vue';
-import router from './router';
+
 
 import './assets/main.scss';
+
 
 const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use({
-  install: (app, options) => {
-    const bucketURL = `https://${awsExports.aws_user_files_s3_bucket}.s3.${awsExports.aws_user_files_s3_bucket_region}.amazonaws.com`;
-    app.config.globalProperties.$thumbnail = (photoId) => {
-      return `${bucketURL}/public/thumbnails/${photoId}.jpg`;
-    };
-  }
-});
+app.use(thumbnail);
 app.mount('#app');
 
