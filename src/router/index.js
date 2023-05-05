@@ -3,8 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
 import ProfileView from '../views/ProfileView.vue';
-import PhotoFormModal from '@/components/PhotoFormModal.vue';
+import PhotoFormModal from '@/components/PhotoModal.vue';
 import LoginComponent from '@/components/LoginComponent.vue';
+import ProfileModal from '@/components/ProfileModal.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,15 +15,30 @@ const router = createRouter({
       redirect: '/photos'
     },
     {
-      path: '/photos/new',
-      name: 'photos/new',
+      path: '/add-photo',
+      name: 'add-photo',
       meta: {
-        title: 'Photos'
+        title: 'Add Photo'
       },
       components: {
         default: PhotosView,
         modal: PhotoFormModal
       },
+    },
+    {
+      path: '/edit-photo/:id',
+      name: 'edit-photo',
+      meta: {
+        title: 'Edit Photo'
+      },
+      components: {
+        default: PhotosView,
+        modal: PhotoFormModal
+      },
+      props: {
+        default: false,
+        modal: true
+      }
     },
     {
       path: '/photos',
@@ -64,7 +80,10 @@ const router = createRouter({
       meta: {
         title: 'Profile'
       },
-      component: ProfileView
+      components: {
+        default: PhotosView,
+        modal: ProfileModal
+      },
     },
     {
       path: '/login',

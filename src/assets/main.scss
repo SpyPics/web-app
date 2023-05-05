@@ -38,6 +38,9 @@ button {
   align-items: center;
 }
 
+input {
+  color: var(--vt-c-white);
+}
 
 .green {
   text-decoration: none;
@@ -50,7 +53,7 @@ button {
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 10px;
+  padding: 10px;
 
   > h2 {
     color: var(--vt-c-white);
@@ -66,12 +69,20 @@ button {
 .view-content {
   flex: 1 1 auto;
   overflow: auto;
-  padding: 0 10px;
+  padding: 0;
 }
 
 .btn {
+  padding: 10px 15px;
   background-color: var(--color-akcent);
   color: var(--color-akcent-inside);
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-radius: 6px;
 
   &:hover {
     background-color: var(--color-akcent-soft);
@@ -97,24 +108,31 @@ button {
     > header {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
       align-items: center;
       height: 64px;
       border-bottom: 1px solid var(--color-border);
       color: var(--vt-c-white);
-      padding-left: 15px;
 
-      > h3 {
-
+      > .actions {
+        margin-left: auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
       }
 
-      > button:last-child {
+      > h3 {
+        margin: 0 15px;
+      }
+
+      > button {
         background-color: transparent;
         height: 64px;
         width: 64px;
-        border-style: solid;
-        border-color: var(--color-border);
-        border-width: 0 0 0 1px;
+        border: none;
+        //border-style: solid;
+        //border-color: var(--color-border);
+        //border-width: 0 1px;
         color: var(--vt-c-white);
         padding: 0;
         cursor: pointer;
@@ -125,6 +143,14 @@ button {
 
         &:hover {
           color: var(--color-akcent);
+        }
+
+        &:first-of-type {
+          border-left-width: 0;
+        }
+
+        &:last-of-type {
+          border-right-width: 0;
         }
       }
     }
@@ -143,5 +169,5 @@ button {
 
 .modal-enter-from,
 .modal-leave-to {
-  transform: translateX(100%);
+  transform: translateY(100%);
 }

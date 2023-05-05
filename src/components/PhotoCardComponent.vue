@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import awsExports from '@/aws-exports.js';
 
+const router = useRouter();
 const bucketURL = `https://${awsExports.aws_user_files_s3_bucket}.s3.${awsExports.aws_user_files_s3_bucket_region}.amazonaws.com`;
 
 const props = defineProps({
@@ -14,21 +16,20 @@ const props = defineProps({
   }
 });
 
-const thumbnailURL = computed(() => {
-  return `${bucketURL}/public/thumbnails/${props.photo.id}.jpg`;
-});
-
+function navigateToEditModal() {
+  router.push({name: 'edit-photo', params: {id: props.photo.id}});
+}
 </script>
 
 <template>
-  <div class="photo-card">
-    <img :src="thumbnailURL"/>
+  <div class="photo-card" @click="navigateToEditModal">
+    <img :src="$thumbnail(photo.id)"/>
     <p class="price">
-      {{ props.photo.price || '$ 0,00'}}
+      {{ photo.price || '$ 0,00' }}
     </p>
 
     <p>
-      {{ props.photo.ready_for_sell }}
+      {{ photo.ready_for_sell }}
     </p>
   </div>
 </template>

@@ -27,5 +27,13 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
+app.use({
+  install: (app, options) => {
+    const bucketURL = `https://${awsExports.aws_user_files_s3_bucket}.s3.${awsExports.aws_user_files_s3_bucket_region}.amazonaws.com`;
+    app.config.globalProperties.$thumbnail = (photoId) => {
+      return `${bucketURL}/public/thumbnails/${photoId}.jpg`;
+    };
+  }
+});
 app.mount('#app');
 
