@@ -1,14 +1,56 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
+import { API, graphqlOperation } from 'aws-amplify';
+import { onCreatePhoto, onDeletePhoto, onUpdatePhoto } from '@/graphql/subscriptions.js';
+import { usePhotosStore } from '@/stores/photos.js';
 import '@aws-amplify/ui-vue/styles.css';
+// import { useProductsStore } from '@/stores/products.js';
 
 const auth = useAuthenticator();
 const route = useRoute();
-
 const height = ref();
+const photosStore = usePhotosStore();
+// const productsStore = useProductsStore();
 
+const createSub = API.graphql(
+  graphqlOperation(onCreatePhoto)
+).subscribe({
+  next: ({provider, value}) => {
+    const photo = value.data.onCreatePhoto;
+    photosStore.$createPatch(photo);
+
+    // if (photo.ready_for_sell) {
+    //   productsStore.fetchProducts();
+    // }
+  },
+  error: error => console.warn(error)
+});
+
+const updateSub = API.graphql(
+  graphqlOperation(onUpdatePhoto)
+).subscribe({
+  next: ({provider, value}) => {
+    const photo = value.data.onUpdatePhoto;
+    photosStore.$updatePatch(photo);
+
+    // if (photo.ready_for_sell) {
+    //   productsStore.fetchProducts();
+    // }
+  },
+  error: error => console.warn(error)
+});
+
+const deleteSub = API.graphql(
+  graphqlOperation(onDeletePhoto)
+).subscribe({
+  next: ({provider, value}) => {
+    photosStore.$deletePatch(value.data.onDeletePhoto);
+    // productsStore.fetchProducts();
+  },
+  error: error => console.warn(error)
+});
 
 onMounted(() => {
   const appElement = document.querySelector('#app');
@@ -20,7 +62,16 @@ onMounted(() => {
 
   window.addEventListener('resize', setHeight);
   setHeight();
+
+  photosStore.fetchPhotos();
 });
+
+onUnmounted(() => {
+  createSub.unsubscribe();
+  updateSub.unsubscribe();
+  deleteSub.unsubscribe();
+});
+
 </script>
 
 <template>

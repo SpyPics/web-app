@@ -3,28 +3,20 @@ import { onMounted, onBeforeMount, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
-
 const $thumbnail = inject('thumbnail');
-
-
 const router = useRouter();
-
 const props = defineProps({
   photo: {
     type: Object,
     default(raw) {
-      console.log(raw);
       return {};
     }
   }
 });
 const thumbnail = ref(null);
 const loading = ref(true);
-onMounted(() => {
-  if (props.photo.id) {
-    loadThumbnail($thumbnail(props.photo.id));
-  }
-});
+let attemptTimeout;
+let attempts = 0;
 
 function loadThumbnail(url) {
   const image = new Image();
@@ -34,7 +26,11 @@ function loadThumbnail(url) {
       thumbnail.value = url;
     })
     .catch(() => {
-      setTimeout(() => {
+      if (attempts > 10) {
+        return console.error(`Could load the thumbnail after ${attempts}`, url);
+      }
+      attempts++;
+      attemptTimeout = setTimeout(() => {
         loadThumbnail(url);
       }, 5000);
     });
@@ -44,6 +40,11 @@ function navigateToSell() {
   // router.push({name: 'edit-photo', params: {id: props.photo.id}});
 }
 
+onMounted(() => {
+  if (props.photo.id) {
+    loadThumbnail($thumbnail(props.photo.id));
+  }
+});
 </script>
 
 <template>

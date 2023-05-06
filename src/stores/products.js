@@ -14,7 +14,7 @@ export const useProductsStore = defineStore('products', {
   state: () => {
     return {
       products: [],
-      activePhoto: null
+      activeProduct: null
     };
   },
   actions: {
@@ -83,29 +83,29 @@ export const useProductsStore = defineStore('products', {
     //
     //   }
     // },
-    async fetchProducts() {
-      const response = await API.graphql({
-        query: listPhotosQuery,
-        variables: {
-          filter: {
-            ready_for_sell: {
-              eq: true
-            }
-          }
-        }
-      });
-
-      this.products = response.data.listPhotos.items.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
-    },
-    async fetchProductById(id) {
-      const response = await API.graphql({
-        query: getPhoto,
-        variables: {
-          id
-        }
-      });
-
-      this.activePhoto = response.data.getPhoto;
-    }
+    // async fetchProducts() {
+    //   const response = await API.graphql({
+    //     query: listPhotosQuery,
+    //     variables: {
+    //       filter: {
+    //         ready_for_sell: {
+    //           eq: true
+    //         }
+    //       }
+    //     }
+    //   });
+    //
+    //   this.products = response.data.listPhotos.items.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1);
+    // },
+    // async fetchProductById(id) {
+    //   const response = await API.graphql({
+    //     query: getPhoto,
+    //     variables: {
+    //       id
+    //     }
+    //   });
+    //
+    //   this.activeProduct = response.data.getPhoto;
+    // }
   },
 });

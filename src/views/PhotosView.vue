@@ -7,7 +7,7 @@ import PhotoCard from '@/components/PhotoCard.vue';
 const photosStore = usePhotosStore();
 
 onMounted(() => {
-  photosStore.fetchPhotos();
+
 });
 </script>
 

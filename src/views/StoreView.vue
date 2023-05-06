@@ -1,13 +1,12 @@
 <script setup>
 import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
-import { useProductsStore } from '@/stores/products';
 import ProductCard from '@/components/ProductCard.vue';
+import { usePhotosStore } from '@/stores/photos.js';
 
-const productsStore = useProductsStore();
+const photosStore = usePhotosStore();
 
 onMounted(() => {
-  productsStore.fetchProducts();
 });
 </script>
 
@@ -19,7 +18,7 @@ onMounted(() => {
   </nav>
 
   <main class="view-content">
-    <product-card v-for="item of productsStore.products" :photo="item">
+    <product-card v-for="item of photosStore.products" :photo="item" :key="item.id">
     </product-card>
   </main>
 
