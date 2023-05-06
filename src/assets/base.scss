@@ -37,6 +37,8 @@
   --color-akcent: hsla(160, 100%, 37%, 1);
   --color-akcent-inside: var(--vt-c-white);
   --color-akcent-soft: hsl(160, 96%, 31%);
+  --color-invalid: hsl(0, 67%, 50%);
+  --color-invalid-soft: hsl(0, 63%, 44%);
 
   --section-gap: 160px;
 
@@ -88,7 +90,7 @@ body {
   color: var(--color-text);
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
-  line-height: 1;
+  line-height: 1.1;
   font-family: 'Montserrat', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

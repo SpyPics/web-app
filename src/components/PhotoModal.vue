@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, onBeforeMount } from 'vue';
+import { ref, reactive, computed, watch, onBeforeMount, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 // import { Auth } from 'aws-amplify';
 import { storeToRefs } from 'pinia';
@@ -7,9 +7,7 @@ import { usePhotosStore } from '@/stores/photos';
 import defaultPhoto from '@/assets/logo.png';
 
 const photosStore = usePhotosStore();
-
 const router = useRouter();
-
 const props = defineProps({
   id: {
     type: String,
@@ -17,17 +15,37 @@ const props = defineProps({
 });
 const preview = ref();
 const loading = ref(false);
+const oldHash = ref('');
+const newHash = ref('');
 const formData = reactive({
   file: null,
-  price: 0.00,
+  price: 0,
   ready_for_sell: false,
 });
-const {activePhoto} = storeToRefs(photosStore);
-
-watch(activePhoto, (data) => {
-  Object.assign(formData, data);
+watch(formData, (input) => {
+  if (typeof input.price === 'number') {
+    newHash.value = JSON.stringify(formData);
+  }
 });
 
+const {activePhoto} = storeToRefs(photosStore);
+watch(activePhoto, (data) => {
+  Object.assign(formData, data);
+  formData.file = true;
+  oldHash.value = JSON.stringify(formData);
+});
+
+const isValid = computed(() => {
+  if (!formData.file) {
+    return false;
+  }
+
+  return !(formData.ready_for_sell && !formData.price);
+});
+
+const hasChanged = computed(() => {
+  return oldHash.value !== newHash.value;
+});
 
 onBeforeMount(() => {
   if (props.id) {
@@ -35,29 +53,58 @@ onBeforeMount(() => {
   }
 });
 
-
 function setFile(file) {
   if (!file.target || !file.target.files[0]) {
     return;
   }
-  formData.file = file.target.files[0];
+
+  const jpg = file.target.files[0];
+  if (jpg.type !== 'image/jpeg') {
+    return alert('Only JPEG files are acceptable');
+  }
+
+  formData.file = jpg;
 
   if (formData.file) {
     preview.value = URL.createObjectURL(formData.file);
   }
 }
 
+function onPriceBlur() {
+  if (typeof formData.price !== 'number') {
+    formData.price = 0;
+  }
+}
+
 async function save(event) {
   event.preventDefault();
   loading.value = true;
+
   if (formData.id) {
-    await photosStore.updatePhoto(formData);
+    if (hasChanged) {
+      await photosStore.updatePhoto(formData);
+    }
   } else {
     await photosStore.createPhoto(formData);
   }
 
   loading.value = false;
   await router.push({name: 'photos'});
+}
+
+async function deletePhoto(event) {
+  event.preventDefault();
+
+  if (window.confirm('This is an irreversible action. Are you sure?')) {
+    loading.value = true;
+
+    if (formData.id) {
+      await photosStore.deletePhoto(formData.id);
+    }
+
+    loading.value = false;
+    router.push({name: 'photos'});
+  }
 }
 </script>
 
@@ -71,7 +118,8 @@ async function save(event) {
         <h3>{{ formData.id ? 'Edit photo' : 'Add new photo' }}</h3>
 
         <div class="actions">
-          <button class="btn" type="submit" :disabled="loading">
+          <button class="btn" type="submit" :disabled="loading || !isValid || !hasChanged">
+            <i class="material-symbols-rounded">done</i>
             Save
           </button>
         </div>
@@ -91,18 +139,41 @@ async function save(event) {
           <span>Price</span>
           <span class="input">
             <i class="material-symbols-rounded">euro_symbol</i>
-            <input type="number" step="any" v-model="formData.price" placeholder="0.00">
+            <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">
           </span>
         </label>
 
-        <label class="field">
-          <span>Ready for sell</span>
-          <input type="checkbox" v-model="formData.ready_for_sell">
-          <span></span>
+        <label class="field field-checkbox"
+               :class="formData.ready_for_sell ? formData.price ? 'valid' : 'invalid' : ''">
+          <div>
+            <input type="checkbox" v-model="formData.ready_for_sell">
+            <span>
+              <i class="material-symbols-rounded">check</i>
+            </span>
+
+            <strong>Ready for sell</strong>
+          </div>
+          <div class="text">
+            Checking this make this photo available in the store page
+          </div>
+          <div class="text error-text" v-if="formData.ready_for_sell && !formData.price">
+            The price must be set in order for this photo to be sellable
+          </div>
         </label>
 
+        <label v-if="formData.updatedAt" class="info">
+          Created at
+          <strong>
+            {{ $formatDate(formData.updatedAt) }}
+          </strong>
+        </label>
 
-        <p>{{ formData.updatedAt }}</p>
+        <div v-if="formData.id" class="actions-bar">
+          <button class="btn btn-delete" type="button" @click="deletePhoto">
+            <i class="material-symbols-rounded">delete</i>
+            Delete
+          </button>
+        </div>
       </main>
     </div>
   </form>
@@ -112,8 +183,8 @@ async function save(event) {
 main {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 10px;
+  gap: 20px;
+  padding: 1em;
 }
 
 .field {
@@ -156,7 +227,7 @@ main {
       > i {
         width: 50px;
         font-size: 3rem;
-        flex: 1 0 50px;
+        flex: 0 0 50px;
       }
 
       > input {
@@ -180,7 +251,70 @@ main {
       }
     }
   }
+
+  &.field-checkbox {
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 6px 6px 10px;
+    gap: 15px;
+
+    &.valid {
+      border-color: var(--color-akcent);
+    }
+
+    &.invalid {
+      border-color: var(--color-invalid);
+    }
+
+    > div {
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      > strong {
+        font-weight: 500;
+      }
+    }
+
+    input {
+      opacity: 0;
+      position: absolute;
+
+      + span {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: 2px solid var(--color-text);
+        color: var(--color-akcent-inside);
+
+        > i {
+          font-size: 20px;
+          opacity: 0;
+        }
+      }
+
+      &:checked + span {
+        background-color: var(--color-akcent);
+
+        > i {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
+.info {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 10px;
+
+  > strong {
+    font-weight: 500;
+  }
+}
 
 </style>

@@ -153,6 +153,7 @@ function save(event) {
 main {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1em;
+  padding: 1em .5em;
 }
 </style>

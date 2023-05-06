@@ -1,29 +1,31 @@
 <script setup>
-import { onMounted, onBeforeMount, ref, inject } from 'vue';
+import { onMounted, onUnmounted, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
-
-const $thumbnail = inject('thumbnail');
-
-
 const router = useRouter();
-
+const $thumbnail = inject('thumbnail');
 const props = defineProps({
   photo: {
     type: Object,
     default(raw) {
-      console.log(raw);
       return {};
     }
   }
 });
 const thumbnail = ref(null);
 const loading = ref(true);
+let attemptTimeout;
+let attempts = 0;
+
 onMounted(() => {
   if (props.photo.id) {
     loadThumbnail($thumbnail(props.photo.id));
   }
+});
+
+onUnmounted(() => {
+  clearTimeout(attemptTimeout);
 });
 
 function loadThumbnail(url) {
@@ -34,7 +36,11 @@ function loadThumbnail(url) {
       thumbnail.value = url;
     })
     .catch(() => {
-      setTimeout(() => {
+      if (attempts > 10) {
+        return console.error(`Could load the thumbnail after ${attempts}`, url);
+      }
+      attempts++;
+      attemptTimeout = setTimeout(() => {
         loadThumbnail(url);
       }, 5000);
     });
@@ -55,14 +61,28 @@ function navigateToEditModal() {
       <loader-icon-overlay v-show="!thumbnail"></loader-icon-overlay>
     </div>
 
-
     <div class="price">
       <i class="material-symbols-rounded">euro_symbol</i>
-      <span>{{ photo.price || '0,00' }}</span>
+      {{ photo.price || '0,00' }}
     </div>
 
-    <p>
-      {{ photo.ready_for_sell }}
+    <p v-if="photo.ready_for_sell" class="text success-text">
+      <i class="material-symbols-rounded">sell</i>
+      Ready for sell
+    </p>
+
+    <p v-else class="text">
+      <i class="material-symbols-rounded">priority_high</i>
+      Not ready for sell
+    </p>
+
+    <p v-else class="text">
+      <i class="material-symbols-rounded">priority_high</i>
+      Not ready
+    </p>
+
+    <p class="text small">
+      {{ $formatDate(photo.createdAt) }}
     </p>
   </div>
 </template>
@@ -72,8 +92,8 @@ function navigateToEditModal() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 6px;
-  gap: 10px;
+  padding: .5em .5em .5em;
+  gap: .1em;
   background-color: #000;
   border-radius: 12px;
   border: 1px solid transparent;
@@ -81,6 +101,14 @@ function navigateToEditModal() {
 
   &:hover {
     border-color: var(--color-akcent);
+  }
+
+  > *:first-child {
+    margin-bottom: .9em;
+  }
+
+  > *:last-child {
+    margin-top: .9em;
   }
 }
 
@@ -101,7 +129,7 @@ function navigateToEditModal() {
 }
 
 .price {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   display: inline-flex;
   align-items: center;
@@ -111,5 +139,9 @@ function navigateToEditModal() {
   > i {
     font-size: inherit;
   }
+}
+
+.small {
+  place-self: flex-end;
 }
 </style>

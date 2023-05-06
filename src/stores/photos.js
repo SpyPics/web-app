@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia';
 import awsExports from '@/aws-exports';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
-import { createPhoto as createPhotoMutation, updatePhoto as updatePhotoMutation } from '@/graphql/mutations';
+import {
+  createPhoto as createPhotoMutation,
+  updatePhoto as updatePhotoMutation,
+  deletePhoto as deletePhotoMutation
+} from '@/graphql/mutations';
 import { onUpdatePhoto } from '@/graphql/subscriptions';
 import { getPhoto, listPhotos as listPhotosQuery } from '@/graphql/queries';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,9 +28,6 @@ export const usePhotosStore = defineStore('photos', {
       activePhoto: null
     };
   },
-  // getters: {
-  //   all: (state) => state.photos,
-  // },
   actions: {
     async createPhoto(data) {
       const {
@@ -35,7 +36,6 @@ export const usePhotosStore = defineStore('photos', {
       } = awsExports;
       const {file} = data;
       const mimeType = file.type || 'image/jpeg';
-      // const extension = file.name.substring(file.name.lastIndexOf('.') + 1);
       const photoId = uuidv4();
       const key = `${auth.user.username}/${photoId}.jpg`;
       const inputData = {
@@ -47,8 +47,8 @@ export const usePhotosStore = defineStore('photos', {
           region,
           bucket
         },
-        price: data.price,
-        ready_for_sell: false
+        price: data.price ? data.price : 0,
+        ready_for_sell: data.ready_for_sell
       };
 
       //s3 bucket storage add file to it
@@ -60,7 +60,10 @@ export const usePhotosStore = defineStore('photos', {
         });
         const response = await API.graphql(graphqlOperation(createPhotoMutation, {input: inputData}));
         if (response.data.createPhoto) {
-          this.photos.unshift(response.data.createPhoto);
+          this.$patch((state) => {
+            state.photos.unshift(response.data.createPhoto);
+            state.hasChanged = true;
+          });
         }
         return Promise.resolve('success');
       } catch (error) {
@@ -73,7 +76,7 @@ export const usePhotosStore = defineStore('photos', {
       const inputData = {
         id: data.id,
         original: data.original,
-        price: data.price,
+        price: data.price ? data.price : 0,
         ready_for_sell: data.ready_for_sell
       };
 
@@ -90,9 +93,45 @@ export const usePhotosStore = defineStore('photos', {
       } catch (error) {
         console.log('createPhoto error', error);
         return Promise.reject(error);
+      }
+    },
+
+    async deletePhoto(id) {
+      const inputData = {
+        id: id
+      };
+
+      try {
+        const key = `${auth.user.username}/${id}.jpg`;
+        const thumbnailKey = `thumbnails/${id}.jpg`;
+        await Storage.remove(key, {
+          level: 'protected'
+        });
+        await Storage.remove(thumbnailKey, {
+          level: 'public'
+        });
+        const response = await API.graphql(graphqlOperation(deletePhotoMutation, {input: inputData}));
+
+        if (this.activePhoto && response.data.deletePhoto.id === this.activePhoto.id) {
+          this.$patch((state) => {
+            const index = state.photos.findIndex(photo => photo.id === state.activePhoto.id);
+            if (index !== -1) {
+              state.photos.splice(index, 1);
+            }
+            state.activePhoto = null;
+
+            state.hasChanged = true;
+          });
+        }
+
+        return Promise.resolve('success');
+      } catch (error) {
+        console.log('createPhoto error', error);
+        return Promise.reject(error);
 
       }
     },
+
     async fetchPhotos() {
       const response = await API.graphql({
         query: listPhotosQuery
@@ -108,7 +147,9 @@ export const usePhotosStore = defineStore('photos', {
         }
       });
 
-      this.activePhoto = response.data.getPhoto;
+      this.$patch((state) => {
+        state.activePhoto = response.data.getPhoto;
+      });
     }
   },
 });

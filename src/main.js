@@ -2,7 +2,7 @@ import { createApp, nextTick } from 'vue';
 import { createPinia } from 'pinia';
 import { Amplify, Hub } from 'aws-amplify';
 import awsExports from './aws-exports';
-import thumbnail from '@/plugins/thumbnail.js';
+import utils from '@/plugins/utils.js';
 import App from './App.vue';
 import router from './router';
 
@@ -30,6 +30,6 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-app.use(thumbnail);
+app.use(utils);
 app.mount('#app');
 

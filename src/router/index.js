@@ -2,10 +2,10 @@ import { nextTick } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
-import ProfileView from '../views/ProfileView.vue';
 import PhotoFormModal from '@/components/PhotoModal.vue';
-import LoginComponent from '@/components/LoginComponent.vue';
+import TheWelcome from '@/components/TheWelcome.vue';
 import ProfileModal from '@/components/ProfileModal.vue';
+import StoreView from '@/views/StoreView.vue';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -57,7 +57,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/StoreView.vue')
+      component: StoreView
     },
     {
       path: '/profile',
@@ -74,7 +74,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       meta: {},
-      component: LoginComponent
+      component: TheWelcome
     }
   ]
 });
