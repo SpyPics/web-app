@@ -37,7 +37,7 @@ function loadThumbnail(url) {
 }
 
 function navigateToSell() {
-  // router.push({name: 'edit-photo', params: {id: props.photo.id}});
+  router.push({name: 'sell-photo', params: {id: props.photo.id}});
 }
 
 onMounted(() => {
@@ -68,8 +68,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 6px 6px 12px;
-  gap: 12px;
+  padding: .5em;
+  gap: .5em;
   background-color: #000;
   border-radius: 12px;
   border: 1px solid transparent;

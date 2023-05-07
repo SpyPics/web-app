@@ -11,18 +11,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="view-nav">
-    <h2>
-      Store
-    </h2>
-  </nav>
+  <article>
+    <nav class="view-nav">
+      <h2>
+        Store
+      </h2>
+    </nav>
 
-  <main class="view-content">
-    <product-card v-for="item of photosStore.products" :photo="item" :key="item.id">
-    </product-card>
-  </main>
+    <main class="view-content">
+      <product-card v-for="item of photosStore.products" :photo="item" :key="item.id">
+      </product-card>
+    </main>
 
-  <RouterView/>
+    <RouterView/>
+  </article>
 </template>
 
 <style scoped lang="scss">

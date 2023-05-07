@@ -47,12 +47,6 @@ const hasChanged = computed(() => {
   return oldHash.value !== newHash.value;
 });
 
-onBeforeMount(() => {
-  if (props.id) {
-    photosStore.fetchPhotoById(props.id);
-  }
-});
-
 function setFile(file) {
   if (!file.target || !file.target.files[0]) {
     return;
@@ -89,7 +83,7 @@ async function save(event) {
   }
 
   loading.value = false;
-  await router.push({name: 'photos'});
+  await router.push({name: 'dashboard'});
 }
 
 async function deletePhoto(event) {
@@ -103,16 +97,22 @@ async function deletePhoto(event) {
     }
 
     loading.value = false;
-    router.push({name: 'photos'});
+    router.push({name: 'dashboard'});
   }
 }
+
+onBeforeMount(() => {
+  if (props.id) {
+    photosStore.fetchPhotoById(props.id);
+  }
+});
 </script>
 
 <template>
   <form class="modal" @submit="save">
     <div class="modal-content">
       <header>
-        <button type="button" @click="router.push('/photos')">
+        <button type="button" @click="router.push({name: 'dashboard'})">
           <i class="material-symbols-rounded">arrow_back</i>
         </button>
         <h3>{{ formData.id ? 'Edit photo' : 'Add new photo' }}</h3>
@@ -183,127 +183,8 @@ async function deletePhoto(event) {
 main {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1em;
   padding: 1em;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-
-  &.field-photo {
-    align-items: stretch;
-    border-radius: 12px;
-    background-color: #000;
-    padding: 15px;
-    gap: 15px;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 512px;
-
-    > input {
-      opacity: 0;
-      position: absolute;
-      visibility: hidden;
-      width: 100px;
-    }
-
-    > .preview {
-      object-fit: contain;
-      aspect-ratio: 1/1;
-      width: 100%;
-      border-radius: 6px;
-    }
-  }
-
-  &.field-price {
-    > .input {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      overflow: hidden;
-
-      > i {
-        width: 50px;
-        font-size: 3rem;
-        flex: 0 0 50px;
-      }
-
-      > input {
-        background-color: transparent;
-        border-style: dashed;
-        border-color: var(--color-border);
-        border-width: 0 0 1px;
-        padding-left: 50px;
-        margin-left: -50px;
-        font-size: 3rem;
-        flex: 1 1 auto;
-
-        &::placeholder {
-          color: var(--vt-c-black-mute);
-        }
-
-        &:focus {
-          outline: none;
-          border-color: var(--color-akcent);
-        }
-      }
-    }
-  }
-
-  &.field-checkbox {
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 6px 6px 10px;
-    gap: 15px;
-
-    &.valid {
-      border-color: var(--color-akcent);
-    }
-
-    &.invalid {
-      border-color: var(--color-invalid);
-    }
-
-    > div {
-      font-weight: 300;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      > strong {
-        font-weight: 500;
-      }
-    }
-
-    input {
-      opacity: 0;
-      position: absolute;
-
-      + span {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        border-radius: 4px;
-        border: 2px solid var(--color-text);
-        color: var(--color-akcent-inside);
-
-        > i {
-          font-size: 20px;
-          opacity: 0;
-        }
-      }
-
-      &:checked + span {
-        background-color: var(--color-akcent);
-
-        > i {
-          opacity: 1;
-        }
-      }
-    }
-  }
 }
 
 .info {

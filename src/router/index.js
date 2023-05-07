@@ -3,79 +3,114 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
 import PhotoFormModal from '@/components/PhotoModal.vue';
-import TheWelcome from '@/components/TheWelcome.vue';
-import ProfileModal from '@/components/ProfileModal.vue';
+// import TheWelcome from '@/components/TheWelcome.vue';
+// import ProfileModal from '@/components/ProfileView.vue';
 import StoreView from '@/views/StoreView.vue';
+import HomeView from '@/views/HomeView.vue';
+import DashboardView from '@/views/DashboardView.vue';
+import AuthView from '@/views/AuthView.vue';
+import ProfileView from '@/views/ProfileView.vue';
+import SellModal from '@/components/SellModal.vue';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    // {
+    //   path: '/',
+    //   redirect: '/photos'
+    // },
     {
       path: '/',
-      redirect: '/photos'
-    },
-    {
-      path: '/add-photo',
-      name: 'add-photo',
+      name: 'home',
       meta: {
-        title: 'Add Photo'
+        title: 'SpyPics'
       },
-      components: {
-        default: PhotosView,
-        modal: PhotoFormModal
-      },
+      component: HomeView
     },
     {
-      path: '/edit-photo/:id',
-      name: 'edit-photo',
+      path: '/dashboard',
       meta: {
-        title: 'Edit Photo'
+        title: 'SpyPics'
       },
-      components: {
-        default: PhotosView,
-        modal: PhotoFormModal
-      },
-      props: {
-        default: false,
-        modal: true
-      }
+      component: DashboardView,
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          meta: {
+            title: 'Photos'
+          },
+          component: PhotosView,
+        },
+        {
+          path: 'add-photo',
+          name: 'add-photo',
+          meta: {
+            title: 'Add Photo'
+          },
+          components: {
+            default: PhotosView,
+            modal: PhotoFormModal
+          },
+        },
+        {
+          path: 'edit-photo/:id',
+          name: 'edit-photo',
+          meta: {
+            title: 'Edit Photo'
+          },
+          components: {
+            default: PhotosView,
+            modal: PhotoFormModal
+          },
+          props: {
+            default: false,
+            modal: true
+          }
+        },
+        {
+          path: 'sell-photo/:id',
+          name: 'sell-photo',
+          meta: {
+            title: 'Sell Photo'
+          },
+          components: {
+            // default: StoreView,
+            modal: SellModal
+          },
+          props: {
+            default: false,
+            modal: true
+          }
+        },
+        {
+          path: 'store',
+          name: 'store',
+          meta: {
+            title: 'Store'
+          },
+          // route level code-splitting
+          // this generates a separate chunk (About.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: StoreView
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          meta: {
+            title: 'Profile'
+          },
+          component: ProfileView,
+        },
+        {
+          path: 'auth',
+          name: 'auth',
+          meta: {},
+          component: AuthView
+        }
+      ]
     },
-    {
-      path: '/photos',
-      name: 'photos',
-      meta: {
-        title: 'Photos'
-      },
-      component: PhotosView,
-    },
-    {
-      path: '/store',
-      name: 'store',
-      meta: {
-        title: 'Store'
-      },
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: StoreView
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      meta: {
-        title: 'Profile'
-      },
-      components: {
-        default: PhotosView,
-        modal: ProfileModal
-      },
-    },
-    {
-      path: '/login',
-      name: 'login',
-      meta: {},
-      component: TheWelcome
-    }
+
   ]
 });
 
@@ -93,13 +128,15 @@ router.beforeEach(async (to, from) => {
   }
 
   const user = await getUser();
-  if (to.path !== '/login' && !user) {
-    return '/login';
+  if (user) {
+    if (to.name === 'auth') {
+      return {name: 'dashboard'};
+    }
+  } else if (to.name !== 'auth') {
+    return {name: 'auth'};
   }
 
-  if (to.path === '/login' && user) {
-    return '/photos';
-  }
+  return true;
 });
 
 router.afterEach((to, from) => {

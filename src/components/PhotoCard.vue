@@ -49,7 +49,6 @@ function loadThumbnail(url) {
 function navigateToEditModal() {
   router.push({name: 'edit-photo', params: {id: props.photo.id}});
 }
-
 </script>
 
 <template>
@@ -92,7 +91,7 @@ function navigateToEditModal() {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: .5em .5em .5em;
+  padding: .5em .5em;
   gap: .1em;
   background-color: #000;
   border-radius: 12px;

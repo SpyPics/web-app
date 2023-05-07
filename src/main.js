@@ -1,30 +1,16 @@
-import { createApp, nextTick } from 'vue';
+import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { Amplify, Hub } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import utils from '@/plugins/utils.js';
 import App from './App.vue';
 import router from './router';
 
-Hub.listen('auth', (data) => {
-  const {payload} = data;
-
-  if (payload.event === 'signIn') {
-    nextTick(() => router.push({path: '/photos'}));
-  }
-
-  if (payload.event === 'signOut') {
-    nextTick(() => router.push({path: '/photos'}));
-  }
-});
-
 
 Amplify.configure({...awsExports, ssr: true});
 
 
-
 import './assets/main.scss';
-
 
 const app = createApp(App);
 
