@@ -114,12 +114,15 @@ function navigateToEditModal() {
 .thumbnail {
   width: 100%;
   padding-top: 100%;
+  overflow: hidden;
 
   > img {
     position: absolute;
     flex: 1 0 auto;
+    object-fit: contain;
     aspect-ratio: 1/1;
     width: 100%;
+    max-height: 512px;
     background-color: #000;
     border-radius: 6px;
     top: 0;

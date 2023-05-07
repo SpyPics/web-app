@@ -18,6 +18,7 @@ const loading = ref(false);
 const oldHash = ref('');
 const newHash = ref('');
 const formData = reactive({
+  id: props.id,
   file: null,
   price: 0,
   ready_for_sell: false,

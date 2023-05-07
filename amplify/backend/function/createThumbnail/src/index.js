@@ -45,7 +45,7 @@ async function createThumbnail(bucket, key, image) {
   try {
     // Use Sharp to resize the image to and convert to JPEG format
     let thumb = await sharp(image).resize(512, 512, {
-      fit: 'contain'
+      fit: 'inside'
     }).jpeg().toBuffer();
 
     await s3.putObject({
