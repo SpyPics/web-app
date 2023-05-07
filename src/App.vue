@@ -26,9 +26,11 @@ onMounted(() => {
 </script>
 
 <template>
-
-    <RouterView/>
-
+  <router-view v-slot="{ Component }">
+    <transition name="fade" :duration="150" mode="out-in">
+      <component :is="Component"/>
+    </transition>
+  </router-view>
 </template>
 
 <style lang="scss" scoped>

@@ -11,14 +11,11 @@ import DashboardView from '@/views/DashboardView.vue';
 import AuthView from '@/views/AuthView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import SellModal from '@/components/SellModal.vue';
+import BuyView from '@/views/BuyView.vue';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   redirect: '/photos'
-    // },
     {
       path: '/',
       name: 'home',
@@ -26,6 +23,15 @@ const router = createRouter({
         title: 'SpyPics'
       },
       component: HomeView
+    },
+    {
+      path: '/buy/:id',
+      name: 'buy-photo',
+      meta: {
+        title: 'Purchase photo'
+      },
+      component: BuyView,
+      props: true
     },
     {
       path: '/dashboard',
@@ -123,7 +129,7 @@ function getUser() {
 }
 
 router.beforeEach(async (to, from) => {
-  if (to.path === '/') {
+  if (to.path === '/' || to.name === 'buy-photo') {
     return true;
   }
 

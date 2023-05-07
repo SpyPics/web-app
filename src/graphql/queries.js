@@ -189,3 +189,8 @@ export const listUsers = /* GraphQL */ `
     }
   }
 `;
+export const getCheckoutLink = /* GraphQL */ `
+  query GetCheckoutLink($id: String!) {
+    getCheckoutLink(id: $id)
+  }
+`;

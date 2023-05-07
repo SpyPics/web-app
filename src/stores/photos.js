@@ -1,17 +1,14 @@
 import { defineStore } from 'pinia';
-import awsExports from '@/aws-exports';
-import { API, graphqlOperation, Storage } from 'aws-amplify';
+import { Auth, API, graphqlOperation, Storage } from 'aws-amplify';
 import {
   createPhoto as createPhotoMutation,
   updatePhoto as updatePhotoMutation,
   deletePhoto as deletePhotoMutation
 } from '@/graphql/mutations';
-import { onUpdatePhoto } from '@/graphql/subscriptions';
 import { getPhoto, listPhotos as listPhotosQuery } from '@/graphql/queries';
 import { v4 as uuidv4 } from 'uuid';
-import { useAuthenticator } from '@aws-amplify/ui-vue';
+import awsExports from '@/aws-exports';
 
-const auth = useAuthenticator();
 
 export const usePhotosStore = defineStore('photos', {
   state: () => {
@@ -27,6 +24,7 @@ export const usePhotosStore = defineStore('photos', {
   },
   actions: {
     async createPhoto(data) {
+      const user = await Auth.currentAuthenticatedUser();
       const {
         aws_user_files_s3_bucket_region: region,
         aws_user_files_s3_bucket: bucket
@@ -34,10 +32,11 @@ export const usePhotosStore = defineStore('photos', {
       const {file} = data;
       const mimeType = file.type || 'image/jpeg';
       const photoId = uuidv4();
-      const key = `${auth.user.username}/${photoId}.jpg`;
+      const key = `${user.username}/${photoId}.jpg`;
+
       const inputData = {
         id: photoId,
-        user_id: auth.user.username,
+        user_id: user.username,
         content_type: mimeType,
         original: {
           key,
@@ -53,7 +52,7 @@ export const usePhotosStore = defineStore('photos', {
         await Storage.put(key, file, {
           level: 'protected',
           contentType: mimeType,
-          metadata: {user_id: auth.user.username, photo_id: photoId}
+          metadata: {user_id: user.username, photo_id: photoId}
         });
         const response = await API.graphql(graphqlOperation(createPhotoMutation, {input: inputData}));
         this.$createPatch(response.data.createPhoto);
@@ -84,12 +83,13 @@ export const usePhotosStore = defineStore('photos', {
     },
 
     async deletePhoto(id) {
+      const user = await Auth.currentAuthenticatedUser();
       const inputData = {
         id: id
       };
 
       try {
-        const key = `${auth.user.username}/${id}.jpg`;
+        const key = `${user.username}/${id}.jpg`;
         const thumbnailKey = `thumbnails/${id}.jpg`;
         await Storage.remove(key, {
           level: 'protected'
@@ -108,10 +108,7 @@ export const usePhotosStore = defineStore('photos', {
     },
 
     async fetchPhotos() {
-      const response = await API.graphql({
-        query: listPhotosQuery
-      });
-
+      const response = await API.graphql({query: listPhotosQuery});
       this.photos = response.data.listPhotos.items.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     },
 

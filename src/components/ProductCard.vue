@@ -89,6 +89,7 @@ onMounted(() => {
 
   > img {
     position: absolute;
+    object-fit: contain;
     flex: 1 0 auto;
     aspect-ratio: 1/1;
     width: 100%;

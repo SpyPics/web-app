@@ -25,6 +25,13 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
+    "getCheckoutLink": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "postSignUpTrigger": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

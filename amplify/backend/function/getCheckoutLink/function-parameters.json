@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "api": {
+      "spypics": [
+        "Query",
+        "Mutation"
+      ]
+    },
+    "storage": {
+      "s3spypicsstoragephotos20230501": [
+        "read"
+      ],
+      "Photo:@model(appsync)": [
+        "create",
+        "read",
+        "update"
+      ],
+      "User:@model(appsync)": [
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "secretNames": [
+    "STRIPE_API_KEY"
+  ]
+}

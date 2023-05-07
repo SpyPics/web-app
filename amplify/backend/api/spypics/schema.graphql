@@ -30,3 +30,7 @@ type S3Object {
   key: String!
   region: String!
 }
+
+type Query {
+  getCheckoutLink(id: String!): String @function(name: "getCheckoutLink-${env}") @auth(rules: [{ allow: public, provider: iam }])
+}

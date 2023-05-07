@@ -70,14 +70,14 @@ function unsubscribe() {
 onMounted(() => {
   Auth.currentAuthenticatedUser().then(data => {
     user.value = data;
-    photosStore.fetchPhotos();
+    subscribe();
   }).catch(() => {
-    // debugger
-    // router.push({name: 'login'});
+    router.push({name: 'auth'});
   });
 });
 
 onUnmounted(() => {
+  unsubscribe();
   hubListenerCancelToken();
 });
 </script>
@@ -92,7 +92,7 @@ onUnmounted(() => {
         <!--        <h3>{{ height }}</h3>-->
         <!--      <h3>{{ route.meta?.title }}</h3>-->
         <h3>{{ user.attributes?.email }}</h3>
-<!--              <h3>{{ user.username }}</h3>-->
+        <!--              <h3>{{ user.username }}</h3>-->
         <router-link class="route-item route-item--profile" :to="{name: 'profile'}">
           <i class="material-symbols-rounded">
             account_box

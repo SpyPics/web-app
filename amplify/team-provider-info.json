@@ -12,10 +12,12 @@
       "AmplifyAppId": "d1hui3t4iqlkmx"
     },
     "categories": {
-      "auth": {
-        "SpyPics": {}
-      },
       "function": {
+        "getCheckoutLink": {
+          "secretsPathAmplifyAppId": "d1hui3t4iqlkmx",
+          "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
+          "s3Key": "amplify-builds/getCheckoutLink-785a30654f586c2f7a73-build.zip"
+        },
         "createThumbnail": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
           "s3Key": "amplify-builds/createThumbnail-5a735a2b506d424c2f50-build.zip"
@@ -24,6 +26,9 @@
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
           "s3Key": "amplify-builds/postSignUpTrigger-78636947717537693038-build.zip"
         }
+      },
+      "auth": {
+        "SpyPics": {}
       },
       "storage": {
         "s3spypicsstoragephotos20230501": {}
