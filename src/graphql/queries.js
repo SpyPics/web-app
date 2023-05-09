@@ -23,6 +23,50 @@ export const getPhoto = /* GraphQL */ `
       size
       content_type
       user_id
+      user {
+        id
+        username
+        name
+        bio
+        photos {
+          items {
+            id
+            original {
+              bucket
+              key
+              region
+            }
+            description
+            ready_for_sell
+            price
+            permalink
+            sold_at
+            latitude
+            longitude
+            altitude
+            width
+            height
+            size
+            content_type
+            user_id
+            user {
+              id
+              username
+              name
+              bio
+              bank_number
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        bank_number
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -55,6 +99,36 @@ export const listPhotos = /* GraphQL */ `
         size
         content_type
         user_id
+        user {
+          id
+          username
+          name
+          bio
+          photos {
+            items {
+              id
+              description
+              ready_for_sell
+              price
+              permalink
+              sold_at
+              latitude
+              longitude
+              altitude
+              width
+              height
+              size
+              content_type
+              user_id
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          bank_number
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -97,6 +171,36 @@ export const photosByUser_id = /* GraphQL */ `
         size
         content_type
         user_id
+        user {
+          id
+          username
+          name
+          bio
+          photos {
+            items {
+              id
+              description
+              ready_for_sell
+              price
+              permalink
+              sold_at
+              latitude
+              longitude
+              altitude
+              width
+              height
+              size
+              content_type
+              user_id
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          bank_number
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -132,6 +236,18 @@ export const getUser = /* GraphQL */ `
           size
           content_type
           user_id
+          user {
+            id
+            username
+            name
+            bio
+            photos {
+              nextToken
+            }
+            bank_number
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
@@ -176,6 +292,15 @@ export const listUsers = /* GraphQL */ `
             size
             content_type
             user_id
+            user {
+              id
+              username
+              name
+              bio
+              bank_number
+              createdAt
+              updatedAt
+            }
             createdAt
             updatedAt
           }

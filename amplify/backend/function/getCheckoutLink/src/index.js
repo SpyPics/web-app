@@ -66,7 +66,7 @@ const query = /* GraphQL */ `query GetPhoto($id: ID!) {
 
 async function getPhoto(id) {
   const variables = {
-      id
+    id
   };
 
   const endpoint = new URL(GRAPHQL_ENDPOINT);
@@ -130,6 +130,7 @@ async function makePrice(stripe, photo) {
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
+  // console.log(event);
   const {Parameters} = await (new aws.SSM())
     .getParameters({
       Names: ['STRIPE_API_KEY'].map(secretName => process.env[secretName]),
@@ -141,7 +142,7 @@ exports.handler = async (event) => {
   const photoId = event.arguments.id;
 
   const photo = await getPhoto(photoId);
-  console.log(photo)
+  console.log(photo);
   // const product = await makeProduct(stripe, photo);
   // const product = await makePrice(stripe, photo);
 
@@ -159,10 +160,12 @@ exports.handler = async (event) => {
       },
     ],
     mode: 'payment',
-    success_url: 'https://google.com',
-    cancel_url: 'https://youtube.com',
+    success_url: `${event.request.headers.referer}success/{CHECKOUT_SESSION_ID}`,
+    cancel_url: `${event.request.headers.referer}failed/{CHECKOUT_SESSION_ID}`,
   });
 
   console.log(session);
-  return session.url;
+  return JSON.stringify({
+    url: session.url
+  });
 };

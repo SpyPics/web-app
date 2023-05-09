@@ -26,6 +26,50 @@ export const onCreatePhoto = /* GraphQL */ `
       size
       content_type
       user_id
+      user {
+        id
+        username
+        name
+        bio
+        photos {
+          items {
+            id
+            original {
+              bucket
+              key
+              region
+            }
+            description
+            ready_for_sell
+            price
+            permalink
+            sold_at
+            latitude
+            longitude
+            altitude
+            width
+            height
+            size
+            content_type
+            user_id
+            user {
+              id
+              username
+              name
+              bio
+              bank_number
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        bank_number
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -56,6 +100,50 @@ export const onUpdatePhoto = /* GraphQL */ `
       size
       content_type
       user_id
+      user {
+        id
+        username
+        name
+        bio
+        photos {
+          items {
+            id
+            original {
+              bucket
+              key
+              region
+            }
+            description
+            ready_for_sell
+            price
+            permalink
+            sold_at
+            latitude
+            longitude
+            altitude
+            width
+            height
+            size
+            content_type
+            user_id
+            user {
+              id
+              username
+              name
+              bio
+              bank_number
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        bank_number
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -86,6 +174,50 @@ export const onDeletePhoto = /* GraphQL */ `
       size
       content_type
       user_id
+      user {
+        id
+        username
+        name
+        bio
+        photos {
+          items {
+            id
+            original {
+              bucket
+              key
+              region
+            }
+            description
+            ready_for_sell
+            price
+            permalink
+            sold_at
+            latitude
+            longitude
+            altitude
+            width
+            height
+            size
+            content_type
+            user_id
+            user {
+              id
+              username
+              name
+              bio
+              bank_number
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        bank_number
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -122,6 +254,18 @@ export const onCreateUser = /* GraphQL */ `
           size
           content_type
           user_id
+          user {
+            id
+            username
+            name
+            bio
+            photos {
+              nextToken
+            }
+            bank_number
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
@@ -164,6 +308,18 @@ export const onUpdateUser = /* GraphQL */ `
           size
           content_type
           user_id
+          user {
+            id
+            username
+            name
+            bio
+            photos {
+              nextToken
+            }
+            bank_number
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
@@ -206,6 +362,18 @@ export const onDeleteUser = /* GraphQL */ `
           size
           content_type
           user_id
+          user {
+            id
+            username
+            name
+            bio
+            photos {
+              nextToken
+            }
+            bank_number
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }

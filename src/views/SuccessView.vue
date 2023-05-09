@@ -6,7 +6,7 @@ import { getCheckoutLink, getPhoto } from '@/graphql/queries';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
 const props = defineProps({
-  id: {
+  sessionId: {
     type: String,
   }
 });
@@ -16,34 +16,11 @@ const loading = ref(false);
 
 
 async function navigateToCheckout() {
-  loading.value = true;
-  const response = await API.graphql({
-    query: getCheckoutLink,
-    variables: {
-      id: props.id
-    },
-    authMode: 'AWS_IAM'
-  });
 
-  const json = JSON.parse(response.data.getCheckoutLink);
-  window.location.href = json.url;
-  console.log(json);
 }
 
 onBeforeMount(async () => {
-  if (props.id) {
-    const response = await API.graphql({
-      query: getPhoto,
-      variables: {
-        id: props.id
-      },
-      authMode: 'AWS_IAM'
-    });
 
-    photo.value = response.data.getPhoto;
-
-    console.log(response);
-  }
 });
 
 </script>

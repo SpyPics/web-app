@@ -1,4 +1,4 @@
-type Photo @model @auth(rules: [{ allow: private, provider: iam }, {allow: owner, ownerField: "user_id"}]) {
+type Photo @model @auth(rules: [{ allow: public, provider: iam, operations: [read] }, { allow: private, provider: iam, operations: [read] }, {allow: owner, ownerField: "user_id"}]) {
   id: ID!
   original: S3Object!
   description: String
@@ -14,9 +14,10 @@ type Photo @model @auth(rules: [{ allow: private, provider: iam }, {allow: owner
   size: Int
   content_type: String
   user_id: ID! @index(name: "byUser")
+  user: User @belongsTo(fields: ["user_id"])
 }
 
-type User @model @auth(rules: [{ allow: private, provider: iam }, {allow: owner, ownerField: "id"}]) {
+type User @model @auth(rules: [{ allow: public, provider: iam, operations: [read] }, { allow: private, provider: iam }, {allow: owner, ownerField: "id"}]) {
   id: ID!
   username: String!
   name: String
@@ -32,5 +33,5 @@ type S3Object {
 }
 
 type Query {
-  getCheckoutLink(id: String!): String @function(name: "getCheckoutLink-${env}") @auth(rules: [{ allow: public, provider: iam }])
+  getCheckoutLink(id: String!): String @function(name: "getCheckoutLink-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
 }

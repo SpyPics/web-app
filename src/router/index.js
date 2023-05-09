@@ -1,5 +1,5 @@
 import { nextTick } from 'vue';
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import PhotosView from '../views/PhotosView.vue';
 import PhotoFormModal from '@/components/PhotoModal.vue';
@@ -12,15 +12,17 @@ import AuthView from '@/views/AuthView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import SellModal from '@/components/SellModal.vue';
 import BuyView from '@/views/BuyView.vue';
+import SuccessView from '@/views/SuccessView.vue';
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
       meta: {
-        title: 'SpyPics'
+        title: 'SpyPics',
+        public: true
       },
       component: HomeView
     },
@@ -28,9 +30,20 @@ const router = createRouter({
       path: '/buy/:id',
       name: 'buy-photo',
       meta: {
-        title: 'Purchase photo'
+        title: 'Purchase photo',
+        public: true
       },
       component: BuyView,
+      props: true
+    },
+    {
+      path: '/success/:sessionId',
+      name: 'success',
+      meta: {
+        title: 'Success',
+        public: true
+      },
+      component: SuccessView,
       props: true
     },
     {
@@ -129,7 +142,7 @@ function getUser() {
 }
 
 router.beforeEach(async (to, from) => {
-  if (to.path === '/' || to.name === 'buy-photo') {
+  if (to.path === '/' || to.meta?.public) {
     return true;
   }
 
