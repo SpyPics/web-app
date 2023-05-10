@@ -13,6 +13,7 @@ import ProfileView from '@/views/ProfileView.vue';
 import SellModal from '@/components/SellModal.vue';
 import BuyView from '@/views/BuyView.vue';
 import SuccessView from '@/views/SuccessView.vue';
+import ProfileModal from '@/components/ProfileModal.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -119,7 +120,9 @@ const router = createRouter({
           meta: {
             title: 'Profile'
           },
-          component: ProfileView,
+          components: {
+            modal: ProfileModal
+          },
         },
         {
           path: 'auth',

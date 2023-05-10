@@ -3,8 +3,8 @@ import { useRouter } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import { usePhotosStore } from '@/stores/photos';
 
+const user = Auth.user;
 
-const store = usePhotosStore();
 
 const router = useRouter();
 
@@ -22,7 +22,7 @@ function save(event) {
   <form class="modal" @submit="save">
     <div class="modal-content">
       <header>
-        <button type="button" @click="router.push('/photos')">
+        <button type="button" @click="router.push({name: 'dashboard'})">
           <i class="material-symbols-rounded">
             arrow_back
           </i>
@@ -37,113 +37,54 @@ function save(event) {
       </header>
 
       <main>
-        <div>
+        <section>
+          <h3>
+            Account
+          </h3>
+
+          <label class="field">
+            <span>Username/Email</span>
+            <strong>
+              {{ user.attributes.email }}
+            </strong>
+          </label>
+        </section>
+
+
+        <section>
+          <h3>
+            User Details
+          </h3>
+          <label class="field field-text">
+          <span>
+            Name
+          </span>
+            <input type="text"/>
+          </label>
+
+          <label class="field field-text">
+          <span>
+            Bio
+          </span>
+            <textarea></textarea>
+          </label>
+        </section>
+
+        <section>
+          <h3>
+            Bank Details
+          </h3>
+          <label class="field field-text">
+          <span>
+            Bank No
+          </span>
+            <input type="text"/>
+          </label>
+        </section>
+
+        <div class="actions-bar">
           <button class="btn" @click="Auth.signOut">Sign out</button>
         </div>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-          <li>Aliquam tincidunt mauris eu risus.</li>
-          <li>Vestibulum auctor dapibus neque.</li>
-        </ul>
-
-
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-          tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-          semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
       </main>
     </div>
   </form>
@@ -153,7 +94,18 @@ function save(event) {
 main {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  padding: 1em .5em;
+  padding: 1rem .5rem;
+  gap: 2.5rem;
+
+  > section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    > h3 {
+      color: var(--vt-c-text-dark-2);
+      font-weight: 600;
+    }
+  }
 }
 </style>

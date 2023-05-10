@@ -14,9 +14,30 @@ const props = defineProps({
 const photo = ref({});
 const loading = ref(false);
 
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || 'download';
+  const clickHandler = () => {
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      a.removeEventListener('click', clickHandler);
+    }, 150);
+  };
+  a.addEventListener('click', clickHandler, false);
+  a.click();
+  return a;
+}
+
 
 async function navigateToCheckout() {
+  const response = await Storage.get('3f4e0493-4b1d-4d43-b503-6a0fb307f977/b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg', {
+    level: 'protected', // defaults to `public`
+    download: true, // defaults to false
+  });
 
+  downloadBlob(response.Body, 'b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg');
 }
 
 onBeforeMount(async () => {
