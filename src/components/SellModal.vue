@@ -48,7 +48,7 @@ async function done(event) {
 
 onBeforeMount(() => {
   if (props.id) {
-    const permalink = `${import.meta.env.VITE_APP_URL}/#/buy/${props.id}`;
+    const permalink = `${import.meta.env.VITE_APP_URL}/buy/${props.id}`;
     console.log(permalink);
     QRCode.toDataURL(permalink, {errorCorrectionLevel: 'H'})
       .then(url => {
