@@ -6,7 +6,7 @@ import { getCheckoutLink, getPhoto } from '@/graphql/queries';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
 const props = defineProps({
-  sessionId: {
+  id: {
     type: String,
   }
 });
@@ -31,13 +31,16 @@ function downloadBlob(blob, filename) {
 }
 
 
-async function navigateToCheckout() {
+async function downloadPhoto() {
+  loading.value = true;
   const response = await Storage.get('3f4e0493-4b1d-4d43-b503-6a0fb307f977/b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg', {
     level: 'protected', // defaults to `public`
     download: true, // defaults to false
   });
 
   downloadBlob(response.Body, 'b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg');
+
+  loading.value = false;
 }
 
 onBeforeMount(async () => {
@@ -48,7 +51,7 @@ onBeforeMount(async () => {
 <template>
   <article>
     <header>
-      <h1>Buy Photo</h1>
+      <h1>Successful</h1>
     </header>
 
     <main>
@@ -66,7 +69,7 @@ onBeforeMount(async () => {
       </p>
 
       <div class="actions-bar">
-        <button class="btn" @click="navigateToCheckout">Buy Photo</button>
+        <button class="btn" @click="downloadPhoto">Buy Photo</button>
       </div>
 
       <loader-icon-overlay v-show="loading"></loader-icon-overlay>

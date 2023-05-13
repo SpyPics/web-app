@@ -35,7 +35,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/success/:sessionId',
+      path: '/success/:id',
       name: 'success',
       meta: {
         title: 'Success',

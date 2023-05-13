@@ -38,7 +38,7 @@ const AWS_REGION = process.env.REGION;
 
 const bucketURL = `https://${BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com`;
 
-const query = /* GraphQL */ `query GetPhoto($id: ID!) {
+const getPhotoQuery = /* GraphQL */ `query GetPhoto($id: ID!) {
   getPhoto(id: $id) {
     id
     original {
@@ -64,11 +64,17 @@ const query = /* GraphQL */ `query GetPhoto($id: ID!) {
   }
 }`;
 
-async function getPhoto(id) {
-  const variables = {
-    id
-  };
+const setSessionIdMutation = /* GraphQL */ `mutation UpdatePhoto(
+    $input: UpdatePhotoInput!
+    $condition: ModelPhotoConditionInput
+  ) {
+    updatePhoto(input: $input, condition: $condition) {
+      id
+      session_id
+    }
+}`;
 
+async function createRequest(query, variables) {
   const endpoint = new URL(GRAPHQL_ENDPOINT);
 
   const signer = new SignatureV4({
@@ -90,12 +96,39 @@ async function getPhoto(id) {
   });
 
   const signed = await signer.sign(requestToBeSigned);
-  const request = new Request(GRAPHQL_ENDPOINT, signed);
+  return new Request(GRAPHQL_ENDPOINT, signed);
+}
+
+async function getPhoto(photoId) {
+  const variables = {
+    id: photoId
+  };
+
+  const request = await createRequest(getPhotoQuery, variables);
 
   try {
     const response = await fetch(request);
     const json = await response.json();
     return json.data.getPhoto;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function setSessionIdForPhoto(photoId, sessionId) {
+  const variables = {
+    input: {
+      id: photoId,
+      session_id: sessionId
+    }
+  };
+
+  const request = await createRequest(setSessionIdMutation, variables)
+
+  try {
+    const response = await fetch(request);
+    const json = await response.json();
+    return json.data.updatePhoto;
   } catch (error) {
     return null;
   }
@@ -160,10 +193,13 @@ exports.handler = async (event) => {
       },
     ],
     mode: 'payment',
-    success_url: `${event.request.headers.referer}success/{CHECKOUT_SESSION_ID}`,
-    cancel_url: `${event.request.headers.referer}failed/{CHECKOUT_SESSION_ID}`,
+    success_url: `${event.request.headers.referer}success/${photoId}`,
+    cancel_url: `${event.request.headers.referer}failed/${photoId}`,
   });
 
+  const p = await setSessionIdForPhoto(photoId, session.id);
+
+  console.log(p);
   console.log(session);
   return JSON.stringify({
     url: session.url

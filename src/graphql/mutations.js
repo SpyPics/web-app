@@ -18,6 +18,7 @@ export const createPhoto = /* GraphQL */ `
       price
       permalink
       sold_at
+      session_id
       latitude
       longitude
       altitude
@@ -44,6 +45,7 @@ export const createPhoto = /* GraphQL */ `
             price
             permalink
             sold_at
+            session_id
             latitude
             longitude
             altitude
@@ -92,6 +94,7 @@ export const updatePhoto = /* GraphQL */ `
       price
       permalink
       sold_at
+      session_id
       latitude
       longitude
       altitude
@@ -118,6 +121,7 @@ export const updatePhoto = /* GraphQL */ `
             price
             permalink
             sold_at
+            session_id
             latitude
             longitude
             altitude
@@ -166,6 +170,7 @@ export const deletePhoto = /* GraphQL */ `
       price
       permalink
       sold_at
+      session_id
       latitude
       longitude
       altitude
@@ -192,6 +197,7 @@ export const deletePhoto = /* GraphQL */ `
             price
             permalink
             sold_at
+            session_id
             latitude
             longitude
             altitude
@@ -246,6 +252,7 @@ export const createUser = /* GraphQL */ `
           price
           permalink
           sold_at
+          session_id
           latitude
           longitude
           altitude
@@ -300,6 +307,7 @@ export const updateUser = /* GraphQL */ `
           price
           permalink
           sold_at
+          session_id
           latitude
           longitude
           altitude
@@ -354,6 +362,7 @@ export const deleteUser = /* GraphQL */ `
           price
           permalink
           sold_at
+          session_id
           latitude
           longitude
           altitude

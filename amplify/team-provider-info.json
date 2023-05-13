@@ -16,7 +16,7 @@
         "getCheckoutLink": {
           "secretsPathAmplifyAppId": "d1hui3t4iqlkmx",
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
-          "s3Key": "amplify-builds/getCheckoutLink-756862734b75456f7973-build.zip"
+          "s3Key": "amplify-builds/getCheckoutLink-52562f724c6145427942-build.zip"
         },
         "createThumbnail": {
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
