@@ -3,10 +3,12 @@
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-soft-transparent: rgba(248, 248, 248, 0.5);
   --vt-c-white-mute: #f2f2f2;
 
   --vt-c-black: #181818;
   --vt-c-black-soft: #222222;
+  --vt-c-black-soft-transparent: rgba(34, 34, 34, 0.5);
   --vt-c-black-mute: #2a2a2a;
 
   --vt-c-indigo: #2c3e50;
@@ -26,6 +28,7 @@
 :root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
+  --color-background-soft-transparent: var(--vt-c-white-soft-transparent);
   --color-background-mute: var(--vt-c-white-mute);
 
   --color-border: var(--vt-c-divider-light-2);
@@ -57,10 +60,12 @@
   --amplify-components-tabs-item-focus-color: var(--vt-c-white);
 }
 
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
+    --color-background-soft-transparent: var(--vt-c-black-soft-transparent);
     --color-background-mute: var(--vt-c-black-mute);
 
     --color-border: var(--vt-c-divider-dark-2);
@@ -69,6 +74,34 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
+
+  .dp__theme_dark {
+    --dp-background-color: var(--color-background);
+    --dp-text-color: #ffffff;
+    --dp-hover-color: #484848;
+    --dp-hover-text-color: #ffffff;
+    --dp-hover-icon-color: #959595;
+    --dp-primary-color: var(--color-akcent);
+    --dp-primary-text-color: #ffffff;
+    --dp-secondary-color: #a9a9a9;
+    --dp-border-color: var(--color-border);
+    --dp-menu-border-color: #2d2d2d;
+    --dp-border-color-hover: #aaaeb7;
+    --dp-disabled-color: #737373;
+    --dp-scroll-bar-background: #212121;
+    --dp-scroll-bar-color: #484848;
+    --dp-success-color: #00701a;
+    --dp-success-color-disabled: #428f59;
+    --dp-icon-color: #959595;
+    --dp-danger-color: #e53935;
+    --dp-highlight-color: rgba(0, 92, 178, 0.2);
+  }
+}
+
+.dp__input {
+  background-color: var(--color-background-mute);
+  border-radius: 0;
+  border-width: 0 0 1px;
 }
 
 *,
@@ -76,7 +109,6 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
-  position: relative;
   font-weight: normal;
 }
 

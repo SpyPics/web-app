@@ -1,4 +1,4 @@
-type Photo @model @auth(rules: [{ allow: public, provider: iam, operations: [read] }, { allow: private, provider: iam, operations: [read] }, {allow: owner, ownerField: "user_id"}]) {
+type Photo @model @auth(rules: [{ allow: public, provider: iam, operations: [read] }, { allow: private, provider: iam }, {allow: owner, ownerField: "user_id"}]) {
   id: ID!
   original: S3Object!
   description: String
@@ -23,8 +23,16 @@ type User @model @auth(rules: [{ allow: public, provider: iam, operations: [read
   username: String!
   name: String
   bio: String
-  photos: [Photo] @hasMany(indexName: "byUser", fields: ["id"])
+  date_of_birth: AWSDate
+  address: String
+  post_code: String
+  city: String
+  phone: String
+  country: String
+  cardholder_name: String
   bank_number: String
+  stripe_account_id: String
+  photos: [Photo] @hasMany(indexName: "byUser", fields: ["id"])
 }
 
 type S3Object {
@@ -34,5 +42,15 @@ type S3Object {
 }
 
 type Query {
-  getCheckoutLink(id: String!): String @function(name: "getCheckoutLink-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
+  getCheckoutLink(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
+
+  getPaymentStatus(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
+
+  downloadImage(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
+}
+
+type Mutation {
+  activateMonetization(id: String!, username: String!, name: String!, date_of_birth: String!, address: String!, post_code: String!, city: String!, phone: String!, cardholder_name: String!, country: String!, bank_number: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: private }])
+
+  activateStripeExpress(id: String!, username: String!, country: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: private }])
 }

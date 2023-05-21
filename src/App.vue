@@ -5,7 +5,7 @@ import { Authenticator, useAuthenticator } from '@aws-amplify/ui-vue';
 import { API, graphqlOperation } from 'aws-amplify';
 import { onCreatePhoto, onDeletePhoto, onUpdatePhoto } from '@/graphql/subscriptions.js';
 import { usePhotosStore } from '@/stores/photos.js';
-import '@aws-amplify/ui-vue/styles.css';
+
 // import { useProductsStore } from '@/stores/products.js';
 
 const auth = useAuthenticator();

@@ -2,7 +2,7 @@
 import defaultPhoto from '@/assets/logo.png';
 import { ref, onBeforeMount } from 'vue';
 import { Auth, API, graphqlOperation, Storage } from 'aws-amplify';
-import { getCheckoutLink, getPhoto } from '@/graphql/queries';
+import { getPaymentStatus as getPaymentStatusQuery, getPhoto as getPhotoQuery, downloadImage } from '@/graphql/queries';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
 const props = defineProps({
@@ -12,7 +12,8 @@ const props = defineProps({
 });
 
 const photo = ref({});
-const loading = ref(false);
+const loading = ref(true);
+const canDownload = ref(false);
 
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
@@ -33,18 +34,66 @@ function downloadBlob(blob, filename) {
 
 async function downloadPhoto() {
   loading.value = true;
-  const response = await Storage.get('3f4e0493-4b1d-4d43-b503-6a0fb307f977/b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg', {
-    level: 'protected', // defaults to `public`
-    download: true, // defaults to false
+  const photoData = photo.value;
+  const response = await Storage.get(`${photoData.user_id}/${photoData.id}.jpg`, {
+    level: 'public',
+    download: true,
   });
 
-  downloadBlob(response.Body, 'b35fbcde-da91-4567-bb33-18fbbf63c4e7.jpg');
+  downloadBlob(response.Body, `${photoData.id}.jpg`);
+
+  // const response = await API.graphql({
+  //   query: downloadImage,
+  //   variables: {
+  //     id: photoData.id
+  //   },
+  //   authMode: 'AWS_IAM'
+  // });
+  console.log(response)
 
   loading.value = false;
 }
 
-onBeforeMount(async () => {
+async function getPaymentStatus(sessionId) {
+  loading.value = true;
+  const response = await API.graphql({
+    query: getPaymentStatusQuery,
+    variables: {
+      id: sessionId
+    },
+    authMode: 'AWS_IAM'
+  });
 
+  loading.value = false;
+  return JSON.parse(response.data.getPaymentStatus);
+}
+
+
+onBeforeMount(async () => {
+  if (!props.id) {
+    window.location.href = '/';
+  }
+
+  if (props.id) {
+    const response = await API.graphql({
+      query: getPhotoQuery,
+      variables: {
+        id: props.id
+      },
+      authMode: 'AWS_IAM'
+    });
+
+    photo.value = response.data.getPhoto;
+
+    if (!photo.value.session_id) {
+      // debugger
+      // window.location.href = '/';
+      console.error('No session_id found');
+    }
+
+    const status = await getPaymentStatus(photo.value.id);
+    canDownload.value = status.success;
+  }
 });
 
 </script>
@@ -68,8 +117,13 @@ onBeforeMount(async () => {
         {{ photo.user?.username }}
       </p>
 
+      <!--      <a href="">-->
+      <!--        This photo is available for purchase-->
+      <!--      </a>-->
+
       <div class="actions-bar">
-        <button class="btn" @click="downloadPhoto">Buy Photo</button>
+        <button class="btn" v-if="canDownload" @click="downloadPhoto">Download Photo</button>
+        <p v-else>Checking...</p>
       </div>
 
       <loader-icon-overlay v-show="loading"></loader-icon-overlay>

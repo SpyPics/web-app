@@ -65,7 +65,7 @@ function navigateToEditModal() {
       {{ photo.price || '0,00' }}
     </div>
 
-    <p v-if="photo.ready_for_sell" class="text success-text">
+    <p v-if="photo.ready_for_sell" class="text text-success">
       <i class="material-symbols-rounded">sell</i>
       Ready for sell
     </p>

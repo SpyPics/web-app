@@ -157,7 +157,7 @@ onBeforeMount(() => {
           <div class="text">
             Checking this make this photo available in the store page
           </div>
-          <div class="text error-text" v-if="formData.ready_for_sell && !formData.price">
+          <div class="text text-error" v-if="formData.ready_for_sell && !formData.price">
             The price must be set in order for this photo to be sellable
           </div>
         </label>

@@ -32,6 +32,15 @@ export const onCreatePhoto = /* GraphQL */ `
         username
         name
         bio
+        date_of_birth
+        address
+        post_code
+        city
+        phone
+        country
+        cardholder_name
+        bank_number
+        stripe_account_id
         photos {
           items {
             id
@@ -59,7 +68,15 @@ export const onCreatePhoto = /* GraphQL */ `
               username
               name
               bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
               bank_number
+              stripe_account_id
               createdAt
               updatedAt
             }
@@ -68,7 +85,6 @@ export const onCreatePhoto = /* GraphQL */ `
           }
           nextToken
         }
-        bank_number
         createdAt
         updatedAt
       }
@@ -108,6 +124,15 @@ export const onUpdatePhoto = /* GraphQL */ `
         username
         name
         bio
+        date_of_birth
+        address
+        post_code
+        city
+        phone
+        country
+        cardholder_name
+        bank_number
+        stripe_account_id
         photos {
           items {
             id
@@ -135,7 +160,15 @@ export const onUpdatePhoto = /* GraphQL */ `
               username
               name
               bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
               bank_number
+              stripe_account_id
               createdAt
               updatedAt
             }
@@ -144,7 +177,6 @@ export const onUpdatePhoto = /* GraphQL */ `
           }
           nextToken
         }
-        bank_number
         createdAt
         updatedAt
       }
@@ -184,6 +216,15 @@ export const onDeletePhoto = /* GraphQL */ `
         username
         name
         bio
+        date_of_birth
+        address
+        post_code
+        city
+        phone
+        country
+        cardholder_name
+        bank_number
+        stripe_account_id
         photos {
           items {
             id
@@ -211,7 +252,15 @@ export const onDeletePhoto = /* GraphQL */ `
               username
               name
               bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
               bank_number
+              stripe_account_id
               createdAt
               updatedAt
             }
@@ -220,7 +269,6 @@ export const onDeletePhoto = /* GraphQL */ `
           }
           nextToken
         }
-        bank_number
         createdAt
         updatedAt
       }
@@ -239,6 +287,15 @@ export const onCreateUser = /* GraphQL */ `
       username
       name
       bio
+      date_of_birth
+      address
+      post_code
+      city
+      phone
+      country
+      cardholder_name
+      bank_number
+      stripe_account_id
       photos {
         items {
           id
@@ -266,10 +323,18 @@ export const onCreateUser = /* GraphQL */ `
             username
             name
             bio
+            date_of_birth
+            address
+            post_code
+            city
+            phone
+            country
+            cardholder_name
+            bank_number
+            stripe_account_id
             photos {
               nextToken
             }
-            bank_number
             createdAt
             updatedAt
           }
@@ -278,7 +343,6 @@ export const onCreateUser = /* GraphQL */ `
         }
         nextToken
       }
-      bank_number
       createdAt
       updatedAt
     }
@@ -294,6 +358,15 @@ export const onUpdateUser = /* GraphQL */ `
       username
       name
       bio
+      date_of_birth
+      address
+      post_code
+      city
+      phone
+      country
+      cardholder_name
+      bank_number
+      stripe_account_id
       photos {
         items {
           id
@@ -321,10 +394,18 @@ export const onUpdateUser = /* GraphQL */ `
             username
             name
             bio
+            date_of_birth
+            address
+            post_code
+            city
+            phone
+            country
+            cardholder_name
+            bank_number
+            stripe_account_id
             photos {
               nextToken
             }
-            bank_number
             createdAt
             updatedAt
           }
@@ -333,7 +414,6 @@ export const onUpdateUser = /* GraphQL */ `
         }
         nextToken
       }
-      bank_number
       createdAt
       updatedAt
     }
@@ -349,6 +429,15 @@ export const onDeleteUser = /* GraphQL */ `
       username
       name
       bio
+      date_of_birth
+      address
+      post_code
+      city
+      phone
+      country
+      cardholder_name
+      bank_number
+      stripe_account_id
       photos {
         items {
           id
@@ -376,10 +465,18 @@ export const onDeleteUser = /* GraphQL */ `
             username
             name
             bio
+            date_of_birth
+            address
+            post_code
+            city
+            phone
+            country
+            cardholder_name
+            bank_number
+            stripe_account_id
             photos {
               nextToken
             }
-            bank_number
             createdAt
             updatedAt
           }
@@ -388,7 +485,6 @@ export const onDeleteUser = /* GraphQL */ `
         }
         nextToken
       }
-      bank_number
       createdAt
       updatedAt
     }

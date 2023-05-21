@@ -19,7 +19,7 @@ export const usePhotosStore = defineStore('photos', {
   },
   getters: {
     products: (state) => {
-      return state.photos.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1).filter(photo => photo.ready_for_sell);
+      return state.photos.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1).filter(photo => photo.ready_for_sell && !photo.sold_at);
     }
   },
   actions: {
@@ -50,7 +50,7 @@ export const usePhotosStore = defineStore('photos', {
       //s3 bucket storage add file to it
       try {
         await Storage.put(key, file, {
-          level: 'protected',
+          level: 'public',
           contentType: mimeType,
           metadata: {user_id: user.username, photo_id: photoId}
         });

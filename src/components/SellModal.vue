@@ -96,7 +96,6 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  padding: 1em;
   justify-content: center;
   overflow: hidden;
 }

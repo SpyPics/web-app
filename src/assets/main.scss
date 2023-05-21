@@ -42,6 +42,24 @@ input {
   color: var(--vt-c-white);
 }
 
+select {
+  background-color: transparent;
+  padding: .5rem 0;
+  border: none;
+  border-bottom: 1px solid var(--vt-c-text-light-2);
+  color: var(--vt-c-white);
+  outline: none;
+
+  &:focus {
+    outline: none;
+    border-color: var(--vt-c-white);
+  }
+
+  > option {
+    background-color: var(--color-background-mute);
+  }
+}
+
 .dashboard-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -190,6 +208,12 @@ input {
     > main {
       overflow: auto;
       flex: 1 1 auto;
+      position: relative;
+      padding: 1em;
+
+      .loader-icon-overlay {
+        background-color: var(--color-background-soft-transparent);
+      }
     }
   }
 }
@@ -214,18 +238,31 @@ input {
   }
 }
 
-.error-text {
+.text-error {
   color: var(--color-invalid);
 }
 
-.success-text {
+.text-success {
   color: var(--color-akcent);
+}
+
+.dual-field-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .5rem;
+
+  > * {
+    width: 100%;
+    flex: 1 1 auto;
+  }
 }
 
 .field {
   display: inline-flex;
   flex-direction: column;
   position: relative;
+  gap: .5rem;
 
   > strong {
     color: var(--vt-c-text-dark-1);
@@ -233,7 +270,6 @@ input {
   }
 
   &.field-text {
-    gap: .5rem;
 
     > input, > textarea {
       background-color: transparent;
@@ -254,12 +290,19 @@ input {
     }
   }
 
+  &.field-date {
+
+  }
+
+  &.field-select {
+
+  }
+
   &.field-photo {
     align-items: stretch;
     border-radius: 12px;
     background-color: #000;
     padding: .5rem;
-    gap: .5rem;
     margin: 0 auto;
     width: 100%;
     max-width: 512px;
@@ -321,7 +364,6 @@ input {
     border: 1px solid var(--color-border);
     border-radius: 10px;
     padding: .5rem;
-    gap: .5rem;
 
     &.valid {
       border-color: var(--color-akcent);

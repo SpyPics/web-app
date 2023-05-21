@@ -29,6 +29,15 @@ export const getPhoto = /* GraphQL */ `
         username
         name
         bio
+        date_of_birth
+        address
+        post_code
+        city
+        phone
+        country
+        cardholder_name
+        bank_number
+        stripe_account_id
         photos {
           items {
             id
@@ -56,7 +65,15 @@ export const getPhoto = /* GraphQL */ `
               username
               name
               bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
               bank_number
+              stripe_account_id
               createdAt
               updatedAt
             }
@@ -65,7 +82,6 @@ export const getPhoto = /* GraphQL */ `
           }
           nextToken
         }
-        bank_number
         createdAt
         updatedAt
       }
@@ -107,6 +123,15 @@ export const listPhotos = /* GraphQL */ `
           username
           name
           bio
+          date_of_birth
+          address
+          post_code
+          city
+          phone
+          country
+          cardholder_name
+          bank_number
+          stripe_account_id
           photos {
             items {
               id
@@ -129,7 +154,6 @@ export const listPhotos = /* GraphQL */ `
             }
             nextToken
           }
-          bank_number
           createdAt
           updatedAt
         }
@@ -181,6 +205,15 @@ export const photosByUser_id = /* GraphQL */ `
           username
           name
           bio
+          date_of_birth
+          address
+          post_code
+          city
+          phone
+          country
+          cardholder_name
+          bank_number
+          stripe_account_id
           photos {
             items {
               id
@@ -203,7 +236,6 @@ export const photosByUser_id = /* GraphQL */ `
             }
             nextToken
           }
-          bank_number
           createdAt
           updatedAt
         }
@@ -221,6 +253,15 @@ export const getUser = /* GraphQL */ `
       username
       name
       bio
+      date_of_birth
+      address
+      post_code
+      city
+      phone
+      country
+      cardholder_name
+      bank_number
+      stripe_account_id
       photos {
         items {
           id
@@ -248,10 +289,18 @@ export const getUser = /* GraphQL */ `
             username
             name
             bio
+            date_of_birth
+            address
+            post_code
+            city
+            phone
+            country
+            cardholder_name
+            bank_number
+            stripe_account_id
             photos {
               nextToken
             }
-            bank_number
             createdAt
             updatedAt
           }
@@ -260,7 +309,6 @@ export const getUser = /* GraphQL */ `
         }
         nextToken
       }
-      bank_number
       createdAt
       updatedAt
     }
@@ -278,6 +326,15 @@ export const listUsers = /* GraphQL */ `
         username
         name
         bio
+        date_of_birth
+        address
+        post_code
+        city
+        phone
+        country
+        cardholder_name
+        bank_number
+        stripe_account_id
         photos {
           items {
             id
@@ -305,7 +362,15 @@ export const listUsers = /* GraphQL */ `
               username
               name
               bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
               bank_number
+              stripe_account_id
               createdAt
               updatedAt
             }
@@ -314,7 +379,6 @@ export const listUsers = /* GraphQL */ `
           }
           nextToken
         }
-        bank_number
         createdAt
         updatedAt
       }
@@ -325,5 +389,15 @@ export const listUsers = /* GraphQL */ `
 export const getCheckoutLink = /* GraphQL */ `
   query GetCheckoutLink($id: String!) {
     getCheckoutLink(id: $id)
+  }
+`;
+export const getPaymentStatus = /* GraphQL */ `
+  query GetPaymentStatus($id: String!) {
+    getPaymentStatus(id: $id)
+  }
+`;
+export const downloadImage = /* GraphQL */ `
+  query DownloadImage($id: String!) {
+    downloadImage(id: $id)
   }
 `;

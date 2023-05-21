@@ -65,13 +65,13 @@ const getPhotoQuery = /* GraphQL */ `query GetPhoto($id: ID!) {
 }`;
 
 const setSessionIdMutation = /* GraphQL */ `mutation UpdatePhoto(
-    $input: UpdatePhotoInput!
-    $condition: ModelPhotoConditionInput
-  ) {
-    updatePhoto(input: $input, condition: $condition) {
-      id
-      session_id
-    }
+  $input: UpdatePhotoInput!
+  $condition: ModelPhotoConditionInput
+) {
+  updatePhoto(input: $input, condition: $condition) {
+    id
+    session_id
+  }
 }`;
 
 async function createRequest(query, variables) {
@@ -123,7 +123,7 @@ async function setSessionIdForPhoto(photoId, sessionId) {
     }
   };
 
-  const request = await createRequest(setSessionIdMutation, variables)
+  const request = await createRequest(setSessionIdMutation, variables);
 
   try {
     const response = await fetch(request);
@@ -163,7 +163,7 @@ async function makePrice(stripe, photo) {
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-  // console.log(event);
+  console.log(event);
   const {Parameters} = await (new aws.SSM())
     .getParameters({
       Names: ['STRIPE_API_KEY'].map(secretName => process.env[secretName]),
