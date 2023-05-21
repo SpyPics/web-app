@@ -5,11 +5,14 @@ import { API, Auth, graphqlOperation, Hub } from 'aws-amplify';
 import { onCreatePhoto, onDeletePhoto, onUpdatePhoto } from '@/graphql/subscriptions.js';
 import { usePhotosStore } from '@/stores/photos.js';
 import '@aws-amplify/ui-vue/styles.css';
+import { useProfileStore } from '@/stores/profile.js';
 
 const user = ref({});
 const router = useRouter();
 const route = useRoute();
 const height = ref();
+const profileStore = useProfileStore();
+
 const photosStore = usePhotosStore();
 const hubListenerCancelToken = Hub.listen('auth', (data) => {
   const {payload} = data;
@@ -36,6 +39,7 @@ const hubListenerCancelToken = Hub.listen('auth', (data) => {
 const subscriptions = [];
 
 function subscribe() {
+  profileStore.fetch();
   subscriptions.push(API.graphql(graphqlOperation(onCreatePhoto)).subscribe({
     next: ({provider, value}) => {
       const photo = value.data.onCreatePhoto;

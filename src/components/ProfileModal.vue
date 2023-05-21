@@ -60,7 +60,6 @@ async function save(event) {
 }
 
 async function activate() {
-  console.log(v$);
   v$.value.$reset();
   const valid = await v$.value.$validate();
   if (valid) {
@@ -232,8 +231,7 @@ onBeforeMount(async () => {
             <p>
               By clicking the following button you are agreeing to the terms of service
             </p>
-            <button type="button" class="btn" :disabled="!profileStore.country || !profileStore.bank_number"
-                    @click="activate">
+            <button type="button" class="btn" :disabled="!profileStore.country" @click="activate">
               Activate
             </button>
           </div>

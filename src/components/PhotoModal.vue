@@ -1,11 +1,12 @@
 <script setup>
 import { ref, reactive, computed, watch, onBeforeMount, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
-// import { Auth } from 'aws-amplify';
 import { storeToRefs } from 'pinia';
 import { usePhotosStore } from '@/stores/photos';
 import defaultPhoto from '@/assets/logo.png';
+import { useProfileStore } from '@/stores/profile.js';
 
+const profileStore = useProfileStore();
 const photosStore = usePhotosStore();
 const router = useRouter();
 const props = defineProps({
@@ -159,6 +160,9 @@ onBeforeMount(() => {
           </div>
           <div class="text text-error" v-if="formData.ready_for_sell && !formData.price">
             The price must be set in order for this photo to be sellable
+          </div>
+          <div class="text text-error" v-if="!profileStore.stripe_account_id">
+            You need to activate monetization in your profile
           </div>
         </label>
 

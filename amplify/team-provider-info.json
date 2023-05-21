@@ -29,7 +29,7 @@
         "PaymentService": {
           "secretsPathAmplifyAppId": "d1hui3t4iqlkmx",
           "deploymentBucketName": "amplify-spypics-staging-185830-deployment",
-          "s3Key": "amplify-builds/PaymentService-685139354f51766b4477-build.zip"
+          "s3Key": "amplify-builds/PaymentService-64424e67414c457a756c-build.zip"
         }
       },
       "auth": {
