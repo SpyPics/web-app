@@ -26,8 +26,12 @@ async function navigateToCheckout() {
   });
 
   const json = JSON.parse(response.data.getCheckoutLink);
-  window.location.href = json.url;
-  console.log(json);
+  if (json.success) {
+    window.location.href = json.url;
+  } else {
+    console.error(json);
+    alert('Something went wrong! Please try again later.');
+  }
 }
 
 onBeforeMount(async () => {

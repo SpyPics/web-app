@@ -159,10 +159,10 @@ onBeforeMount(() => {
             Checking this make this photo available in the store page
           </div>
           <div class="text text-error" v-if="formData.ready_for_sell && !formData.price">
-            The price must be set in order for this photo to be sellable
+            The price must be set
           </div>
           <div class="text text-error" v-if="!profileStore.stripe_account_id">
-            You need to activate monetization in your profile
+            The monetization must be activated
           </div>
         </label>
 

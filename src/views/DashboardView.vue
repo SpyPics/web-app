@@ -97,7 +97,7 @@ onUnmounted(() => {
         <!--      <h3>{{ route.meta?.title }}</h3>-->
         <h3>{{ user.attributes?.email }}</h3>
         <!--              <h3>{{ user.username }}</h3>-->
-        <router-link class="route-item route-item--profile" :to="{name: 'profile'}">
+        <router-link class="route-item route-item--profile" :to="{name: 'profile', query: {return: route.name}}">
           <i class="material-symbols-rounded">
             account_box
           </i>

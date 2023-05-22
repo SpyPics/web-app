@@ -520,11 +520,7 @@ export const activateMonetization = /* GraphQL */ `
   }
 `;
 export const activateStripeExpress = /* GraphQL */ `
-  mutation ActivateStripeExpress(
-    $id: String!
-    $username: String!
-    $country: String!
-  ) {
-    activateStripeExpress(id: $id, username: $username, country: $country)
+  mutation ActivateStripeExpress($id: String!) {
+    activateStripeExpress(id: $id)
   }
 `;

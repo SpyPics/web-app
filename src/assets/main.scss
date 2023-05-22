@@ -26,6 +26,10 @@ h1, h2, h3, h4, button {
   font-family: 'Poppins', sans-serif;
 }
 
+p {
+  color: var(--vt-c-white);
+}
+
 button {
   text-transform: uppercase;
   display: inline-flex;

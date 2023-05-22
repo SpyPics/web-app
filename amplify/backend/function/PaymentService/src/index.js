@@ -287,6 +287,7 @@ async function getCheckoutLink(env, args, request) {
   await setSessionIdForPhoto(photoId, session.id);
 
   return JSON.stringify({
+    success: true,
     type: 'checkout_link',
     url: session.url
   });
@@ -437,7 +438,14 @@ async function activateStripeExpress(env, args, request) {
   }
 
   const user = await getUser(args.id);
-  if (!user.country && !args.country) {
+  if (!user.name) {
+    return JSON.stringify({
+      error: true,
+      message: 'name is required'
+    });
+  }
+
+  if (!user.country) {
     return JSON.stringify({
       error: true,
       message: 'country is required'
@@ -446,6 +454,7 @@ async function activateStripeExpress(env, args, request) {
 
   try {
     if (!user.stripe_account_id) {
+      const names = user.name.split(' ').filter(Boolean);
       const account = await stripe.accounts.create({
         country: args.country,
         email: args.username,
@@ -464,7 +473,8 @@ async function activateStripeExpress(env, args, request) {
           //product_description: 'SpyPics! User-friendly platform makes it easy to browse and purchase photos.'
         },
         individual: {
-          first_name: user.name,
+          first_name: names[0],
+          last_name: names.slice(1).join(' '),
           email: user.username,
         },
         metadata: {
@@ -473,7 +483,7 @@ async function activateStripeExpress(env, args, request) {
       });
       console.log('Stripe Account:', account);
 
-      const updatedUser = await updateStripId(args.id, account.id, user.country || args.country);
+      const updatedUser = await updateStripId(args.id, account.id, user.country);
       Object.assign(user, updatedUser);
     }
 

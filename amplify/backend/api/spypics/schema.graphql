@@ -52,5 +52,5 @@ type Query {
 type Mutation {
   activateMonetization(id: String!, username: String!, name: String!, date_of_birth: String!, address: String!, post_code: String!, city: String!, phone: String!, cardholder_name: String!, country: String!, bank_number: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: private }])
 
-  activateStripeExpress(id: String!, username: String!, country: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: private }])
+  activateStripeExpress(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: private }])
 }

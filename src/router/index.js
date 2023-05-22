@@ -120,6 +120,10 @@ const router = createRouter({
           components: {
             modal: ProfileModal
           },
+          props: {
+            default: false,
+            modal: true
+          }
         },
         {
           path: 'auth',

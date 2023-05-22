@@ -3,7 +3,9 @@ import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import ProductCard from '@/components/ProductCard.vue';
 import { usePhotosStore } from '@/stores/photos.js';
+import { useProfileStore } from '@/stores/profile.js';
 
+const profileStore = useProfileStore();
 const photosStore = usePhotosStore();
 
 onMounted(() => {
@@ -19,8 +21,15 @@ onMounted(() => {
     </nav>
 
     <main class="view-content">
-      <product-card v-for="item of photosStore.products" :photo="item" :key="item.id">
-      </product-card>
+      <p v-if="!profileStore.stripe_account_id" class="not-active">
+        Please activate monetization in your profile
+        <router-link :to="{name: 'profile', query: {return: 'store'}}">Go to profile</router-link>
+      </p>
+
+      <template v-else>
+        <product-card v-for="item of photosStore.products" :photo="item" :key="item.id">
+        </product-card>
+      </template>
     </main>
 
     <RouterView/>
@@ -34,5 +43,12 @@ main {
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
   padding: 1em .5em;
+}
+
+.not-active {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  align-items: center;
 }
 </style>

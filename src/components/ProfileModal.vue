@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeMount, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Auth } from 'aws-amplify';
 import { useProfileStore } from '@/stores/profile';
 import { useVuelidate } from '@vuelidate/core';
@@ -10,6 +10,7 @@ import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 const router = useRouter();
 const profileStore = useProfileStore();
 const user = Auth.user;
+const route = useRoute();
 
 const rules = {
   name: {required},
@@ -26,6 +27,10 @@ const rules = {
 const v$ = useVuelidate(rules, profileStore);
 const loading = ref(false);
 const errors = ref({});
+const profileSnapshot = ref({});
+const canSave = computed(() => {
+  return JSON.stringify(profileSnapshot.value) !== JSON.stringify(profileStore.$state);
+});
 
 const countries = ref([
   {
@@ -56,6 +61,7 @@ async function save(event) {
 
   loading.value = true;
   await profileStore.save();
+  profileSnapshot.value = Object.assign({}, profileStore.$state);
   loading.value = false;
 }
 
@@ -79,6 +85,7 @@ async function activate() {
 onBeforeMount(async () => {
   loading.value = true;
   await profileStore.fetch();
+  profileSnapshot.value = Object.assign({}, profileStore.$state);
   loading.value = false;
 });
 </script>
@@ -87,7 +94,7 @@ onBeforeMount(async () => {
   <form class="modal" @submit="save">
     <div class="modal-content">
       <header>
-        <button type="button" @click="router.push({name: 'dashboard'})">
+        <button type="button" @click="router.push({name: route.query.return || 'dashboard'})">
           <i class="material-symbols-rounded">
             arrow_back
           </i>
@@ -95,7 +102,7 @@ onBeforeMount(async () => {
         <h3>Profile</h3>
 
         <div class="actions">
-          <button class="btn" type="submit">
+          <button class="btn" type="submit" :disabled="!canSave">
             Save
           </button>
         </div>
@@ -217,6 +224,29 @@ onBeforeMount(async () => {
             <span class="text text-error" v-if="v$.country.$error">Country is required </span>
           </label>
 
+
+          <ul>
+            <li>
+              <strong>Email</strong>
+              <p>{{ profileSnapshot.username }}</p>
+            </li>
+            <li>
+              <strong>Name</strong>
+              <p :class="{'text-error': !profileSnapshot.name}">
+                {{ profileSnapshot.name || 'Name is required' }}
+              </p>
+            </li>
+            <li>
+              <strong>Country</strong>
+              <p>{{ profileSnapshot.country || 'Country is required' }}</p>
+            </li>
+
+            <li>
+              <strong>Last update</strong>
+              <p>{{ $formatDate(profileSnapshot.updatedAt) }}</p>
+            </li>
+          </ul>
+
           <div v-if="profileStore.stripe_account_id">
             <p class="text text-success">
               <i class="material-symbols-rounded">check</i>
@@ -228,10 +258,11 @@ onBeforeMount(async () => {
           </div>
 
           <div v-else>
-            <p>
-              By clicking the following button you are agreeing to the terms of service
+            <p v-show="!profileSnapshot.name || !profileSnapshot.country">
+              Complete your profile and hit save in order to be able to activate monetization.
             </p>
-            <button type="button" class="btn" :disabled="!profileStore.country" @click="activate">
+            <button type="button" class="btn" :disabled="!profileSnapshot.name || !profileSnapshot.country"
+                    @click="activate">
               Activate
             </button>
           </div>
@@ -286,14 +317,37 @@ main {
   > div {
     display: flex;
     flex-direction: row;
-    gap: .5rem;
     align-items: center;
     flex-wrap: wrap;
+    gap: .5rem;
+
+    > button {
+      margin-left: auto;
+    }
   }
 
   p {
-    color: var(--vt-c-white);
     flex: 1 1 auto;
+  }
+
+  ul {
+    font-size: .86rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+
+    > li {
+      > strong {
+        font-weight: 600;
+      }
+
+      > p {
+        margin-top: .2rem;
+      }
+    }
   }
 }
 
