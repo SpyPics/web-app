@@ -210,7 +210,7 @@ async function updateUserPaymentInfo(id, bank_number, stripe_account_id) {
   }
 }
 
-async function updateStripId(id, stripe_account_id, country) {
+async function updateStripId(id, stripe_account_id) {
   const query = /* GraphQL */ `mutation UpdateUser(
     $input: UpdateUserInput!
     $condition: ModelUserConditionInput
@@ -227,8 +227,7 @@ async function updateStripId(id, stripe_account_id, country) {
   const variables = {
     input: {
       id,
-      stripe_account_id,
-      country
+      stripe_account_id
     },
   };
 
@@ -456,8 +455,8 @@ async function activateStripeExpress(env, args, request) {
     if (!user.stripe_account_id) {
       const names = user.name.split(' ').filter(Boolean);
       const account = await stripe.accounts.create({
-        country: args.country,
-        email: args.username,
+        country: user.country,
+        email: user.username,
         type: 'express',
         capabilities: {
           card_payments: {
@@ -483,7 +482,7 @@ async function activateStripeExpress(env, args, request) {
       });
       console.log('Stripe Account:', account);
 
-      const updatedUser = await updateStripId(args.id, account.id, user.country);
+      const updatedUser = await updateStripId(user.id, account.id);
       Object.assign(user, updatedUser);
     }
 
