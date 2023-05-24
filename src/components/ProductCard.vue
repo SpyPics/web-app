@@ -68,15 +68,15 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: .5em;
-  gap: .5em;
+  padding: .6rem;
+  gap: .8rem;
   background-color: #000;
-  border-radius: 12px;
   border: 1px solid transparent;
   position: relative;
-  width: 100%;
   max-width: 512px;
+  max-height: 612px;
   margin: 0 auto;
+  box-shadow: 0 7px 15px rgba(#888, .15);
 
   &:hover {
     border-color: var(--color-akcent);
@@ -85,18 +85,15 @@ onMounted(() => {
 
 .thumbnail {
   width: 100%;
-  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
 
   > img {
-    position: absolute;
-    object-fit: contain;
-    flex: 1 0 auto;
-    aspect-ratio: 1/1;
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
     background-color: #000;
-    border-radius: 6px;
-    top: 0;
-    left: 0;
+    display: block;
   }
 }
 

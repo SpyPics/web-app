@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import { usePhotosStore } from '@/stores/photos';
 import defaultPhoto from '@/assets/logo.png';
 import { useProfileStore } from '@/stores/profile.js';
+import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
 const profileStore = useProfileStore();
 const photosStore = usePhotosStore();
@@ -120,7 +121,12 @@ onBeforeMount(() => {
         <h3>{{ formData.id ? 'Edit photo' : 'Add new photo' }}</h3>
 
         <div class="actions">
-          <button class="btn" type="submit" :disabled="loading || !isValid || !hasChanged">
+          <button v-if="formData.sold_at" class="btn" type="button" @click="router.push({name: 'dashboard'})">
+            <i class="material-symbols-rounded">done</i>
+            Done
+          </button>
+
+          <button v-else class="btn" type="submit" :disabled="loading || !isValid || !hasChanged">
             <i class="material-symbols-rounded">done</i>
             Save
           </button>
@@ -137,41 +143,59 @@ onBeforeMount(() => {
           </template>
         </label>
 
-        <label class="field field-price">
-          <span>Price</span>
-          <span class="input">
+        <template v-if="formData.sold_at">
+          <div class="info-item">
+            <span>Sold at</span>
+            <strong>
+              {{ $formatDate(formData.sold_at) }}
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span>Sold for</span>
+            <strong class="text">
+              <i class="material-symbols-rounded">euro_symbol</i>{{ formData.price }}
+            </strong>
+          </div>
+        </template>
+
+        <template v-else>
+          <label class="field field-price">
+            <span>Price</span>
+            <span class="input">
             <i class="material-symbols-rounded">euro_symbol</i>
             <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">
           </span>
-        </label>
+          </label>
 
-        <label class="field field-checkbox"
-               :class="formData.ready_for_sell ? formData.price ? 'valid' : 'invalid' : ''">
-          <div>
-            <input type="checkbox" v-model="formData.ready_for_sell">
-            <span>
+          <label class="field field-checkbox"
+                 :class="formData.ready_for_sell ? formData.price ? 'valid' : 'invalid' : ''">
+            <div>
+              <input type="checkbox" v-model="formData.ready_for_sell">
+              <span>
               <i class="material-symbols-rounded">check</i>
             </span>
 
-            <strong>Ready for sell</strong>
-          </div>
-          <div class="text">
-            Checking this make this photo available in the store page
-          </div>
-          <div class="text text-error" v-if="formData.ready_for_sell && !formData.price">
-            The price must be set
-          </div>
-          <div class="text text-error" v-if="!profileStore.stripe_account_id">
-            The monetization must be activated
-          </div>
-        </label>
+              <strong>Ready for sell</strong>
+            </div>
+            <div class="text">
+              Checking this make this photo available in the store page
+            </div>
+            <div class="text text-error" v-if="formData.ready_for_sell && !formData.price">
+              The price must be set
+            </div>
+            <div class="text text-error" v-if="!profileStore.stripe_account_id">
+              The monetization must be activated
+            </div>
+          </label>
 
-        <label v-if="formData.updatedAt" class="info">
-          Created at
-          <strong>
-            {{ $formatDate(formData.updatedAt) }}
-          </strong>
-        </label>
+          <label v-if="formData.updatedAt" class="info">
+            Created at
+            <strong>
+              {{ $formatDate(formData.updatedAt) }}
+            </strong>
+          </label>
+        </template>
 
         <div v-if="formData.id" class="actions-bar">
           <button class="btn btn-delete" type="button" @click="deletePhoto">
@@ -179,6 +203,10 @@ onBeforeMount(() => {
             Delete
           </button>
         </div>
+
+        <transition name="fade" :duration="150">
+          <loader-icon-overlay v-show="loading"></loader-icon-overlay>
+        </transition>
       </main>
     </div>
   </form>

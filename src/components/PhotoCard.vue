@@ -65,7 +65,12 @@ function navigateToEditModal() {
       {{ photo.price || '0,00' }}
     </div>
 
-    <p v-if="photo.ready_for_sell" class="text text-success">
+    <p v-if="photo.sold_at" class="text text-success">
+      <i class="material-symbols-rounded">thumb_up</i>
+      Sold at {{ $formatDate(photo.sold_at) }}
+    </p>
+
+    <p v-else-if="photo.ready_for_sell" class="text text-success">
       <i class="material-symbols-rounded">sell</i>
       Ready for sell
     </p>
@@ -113,20 +118,20 @@ function navigateToEditModal() {
 
 .thumbnail {
   width: 100%;
-  padding-top: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   overflow: hidden;
 
   > img {
-    position: absolute;
-    flex: 1 0 auto;
-    object-fit: contain;
-    aspect-ratio: 1/1;
-    width: 100%;
-    max-height: 512px;
+    max-width: 100%;
+    max-height: 100%;
     background-color: #000;
     border-radius: 6px;
-    top: 0;
-    left: 0;
+    display: block;
   }
 }
 

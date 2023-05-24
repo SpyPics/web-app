@@ -242,56 +242,6 @@ async function updateStripId(id, stripe_account_id) {
   }
 }
 
-async function getCheckoutLink(env, args, request) {
-  const Stripe = require('stripe');
-  const stripe = Stripe(env.STRIPE_API_KEY);
-  const photoId = args.id;
-
-  const photo = await getPhoto(photoId);
-
-  if (!photo.user || !photo.user.stripe_account_id) {
-    return JSON.stringify({
-      error: true,
-      message: 'Stripe account is missing for this user',
-      user: photo.user
-    });
-  }
-
-  const photoPrice = (photo.price * 100);
-  const fivePercent = photoPrice * 0.05;
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: photoId,
-          },
-          unit_amount: photoPrice,
-        },
-        quantity: 1,
-      },
-    ],
-    payment_intent_data: {
-      application_fee_amount: fivePercent,
-      transfer_data: {
-        destination: photo.user.stripe_account_id,
-      },
-    },
-    mode: 'payment',
-    success_url: `${request.headers.referer}success/${photoId}`,
-    cancel_url: `${request.headers.referer}failed/${photoId}`,
-  });
-
-  await setSessionIdForPhoto(photoId, session.id);
-
-  return JSON.stringify({
-    success: true,
-    type: 'checkout_link',
-    url: session.url
-  });
-}
-
 async function setSoldAt(photoId) {
   const query = /* GraphQL */ `mutation UpdatePhoto(
     $input: UpdatePhotoInput!
@@ -321,6 +271,69 @@ async function setSoldAt(photoId) {
   }
 }
 
+async function getCheckoutLink(env, args, request) {
+  const stripe = require('stripe')(env.STRIPE_API_KEY);
+  const photoId = args.id;
+  const photo = await getPhoto(photoId);
+  if (!photo.user || !photo.user.stripe_account_id) {
+    return JSON.stringify({
+      error: true,
+      message: 'Stripe account is missing for this user',
+      user: photo.user
+    });
+  }
+
+  if (photo.session_id) {
+    const session = await stripe.checkout.sessions.retrieve(photo.session_id);
+    if (session.status === 'open') {
+      return JSON.stringify({
+        type: 'checkout_link_open',
+        url: session.url
+      });
+    }
+
+    if (session.status === 'complete') {
+      return JSON.stringify({
+        type: 'already_sold',
+      });
+    }
+  }
+
+  const photoPrice = (photo.price * 100);
+  const fivePercent = photoPrice * 0.05;
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: photoId,
+          },
+          unit_amount: photoPrice,
+        },
+        quantity: 1,
+      },
+    ],
+    payment_intent_data: {
+      application_fee_amount: fivePercent,
+      transfer_data: {
+        destination: photo.user.stripe_account_id,
+      },
+    },
+    mode: 'payment',
+    success_url: `${request.headers.referer}success/${photoId}`,
+    cancel_url: `${request.headers.referer}failed/${photoId}`,
+  });
+
+  console.info('Stripe Session:\n' + JSON.stringify(session, null, 2));
+  await setSessionIdForPhoto(photoId, session.id);
+
+  return JSON.stringify({
+    type: 'checkout_link',
+    url: session.url
+  });
+}
+
 async function getPaymentStatus(env, args, request) {
   if (!args.id) {
     return JSON.stringify({
@@ -331,27 +344,33 @@ async function getPaymentStatus(env, args, request) {
 
   const photo = await getPhoto(args.id);
   if (!photo.session_id) {
-    return getCheckoutLink(env, {id: photo.id}, request);
+    return JSON.stringify({
+      type: 'redirect_to_buy',
+      url: `${request.headers.referer}buy/${photo.id}`
+    });
   }
 
   const stripe = require('stripe')(env.STRIPE_API_KEY);
   const session = await stripe.checkout.sessions.retrieve(photo.session_id);
   if (session.status === 'expired') {
-    return getCheckoutLink(env, {id: photo.id}, request);
+    return JSON.stringify({
+      type: 'expired',
+      url: `${request.headers.referer}buy/${photo.id}`
+    });
   }
 
   if (session.status === 'open') {
     return JSON.stringify({
-      type: 'checkout_link',
+      type: 'checkout_link_open',
       url: session.url
     });
   }
 
   const soldPhoto = await setSoldAt(photo.id);
-  console.log('Sold Photo', soldPhoto);
+  console.info('Sold Photo:\n' + JSON.stringify(soldPhoto, null, 2));
 
   return JSON.stringify({
-    success: true,
+    type: 'success',
     photo: soldPhoto,
     message: 'Payment was successful'
   });
@@ -382,12 +401,6 @@ async function activateMonetization(env, args, request) {
     },
     business_profile: {
       mcc: '7829',
-      // "name": "Krillit",
-      // "product_description": "Photography Webshop",
-      // "support_address": null,
-      // "support_email": null,
-      // "support_phone": "+43017202189",
-      // "support_url": null,
       'url': 'www.spypics.at'
     },
     individual: {
@@ -426,9 +439,7 @@ async function activateMonetization(env, args, request) {
 }
 
 async function activateStripeExpress(env, args, request) {
-  const Stripe = require('stripe');
-  const stripe = Stripe(env.STRIPE_API_KEY);
-
+  const stripe = require('stripe')(env.STRIPE_API_KEY);
   if (!args.id) {
     return JSON.stringify({
       error: true,
@@ -469,7 +480,6 @@ async function activateStripeExpress(env, args, request) {
         business_type: 'individual',
         business_profile: {
           url: 'https://spypics.at',
-          //product_description: 'SpyPics! User-friendly platform makes it easy to browse and purchase photos.'
         },
         individual: {
           first_name: names[0],
@@ -480,7 +490,7 @@ async function activateStripeExpress(env, args, request) {
           id: user.id
         },
       });
-      console.log('Stripe Account:', account);
+      console.info('Stripe Account:\n' + JSON.stringify(account, null, 2));
 
       const updatedUser = await updateStripId(user.id, account.id);
       Object.assign(user, updatedUser);
@@ -496,7 +506,7 @@ async function activateStripeExpress(env, args, request) {
     }
 
     const accountLink = await getAccountLinkForUser(stripe, user.stripe_account_id, request.headers.referer);
-    console.log('User', user);
+    // console.log('User', user);
     return JSON.stringify({
       type: 'account_link',
       url: accountLink.url
@@ -516,7 +526,6 @@ async function downloadImage(env, args, request) {
       Bucket: photo.original.bucket,
       Key: photo.original.key
     };
-
 
 
     return await s3.getObject(params).promise();

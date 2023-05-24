@@ -5,7 +5,7 @@ import {
   updatePhoto as updatePhotoMutation,
   deletePhoto as deletePhotoMutation
 } from '@/graphql/mutations';
-import { getPhoto, listPhotos as listPhotosQuery } from '@/graphql/queries';
+import { getPhoto } from '@/graphql/queries';
 import { v4 as uuidv4 } from 'uuid';
 import awsExports from '@/aws-exports';
 
@@ -108,6 +108,57 @@ export const usePhotosStore = defineStore('photos', {
     },
 
     async fetchPhotos() {
+      const listPhotosQuery = /* GraphQL */ `query ListPhotos(
+        $filter: ModelPhotoFilterInput
+        $limit: Int
+        $nextToken: String
+      ) {
+        listPhotos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          items {
+            id
+            original {
+              bucket
+              key
+              region
+            }
+            description
+            ready_for_sell
+            price
+            permalink
+            sold_at
+            session_id
+            latitude
+            longitude
+            altitude
+            width
+            height
+            size
+            content_type
+            user_id
+            user {
+              id
+              username
+              name
+              bio
+              date_of_birth
+              address
+              post_code
+              city
+              phone
+              country
+              cardholder_name
+              bank_number
+              stripe_account_id
+              createdAt
+              updatedAt
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+
       const response = await API.graphql({query: listPhotosQuery});
       this.photos = response.data.listPhotos.items.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     },

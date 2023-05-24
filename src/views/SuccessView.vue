@@ -49,7 +49,7 @@ async function downloadPhoto() {
   //   },
   //   authMode: 'AWS_IAM'
   // });
-  console.log(response)
+  console.log(response);
 
   loading.value = false;
 }
@@ -75,7 +75,7 @@ onBeforeMount(async () => {
   }
 
   if (props.id) {
-    const response = await API.graphql({
+    const requestPhoto = await API.graphql({
       query: getPhotoQuery,
       variables: {
         id: props.id
@@ -83,16 +83,35 @@ onBeforeMount(async () => {
       authMode: 'AWS_IAM'
     });
 
-    photo.value = response.data.getPhoto;
+    photo.value = requestPhoto.data.getPhoto;
 
     if (!photo.value.session_id) {
-      // debugger
-      // window.location.href = '/';
       console.error('No session_id found');
     }
 
-    const status = await getPaymentStatus(photo.value.id);
-    canDownload.value = status.success;
+    const paymentStatus = await getPaymentStatus(photo.value.id);
+    switch (paymentStatus.type) {
+      case 'success':
+        canDownload.value = true;
+        break;
+
+      case 'redirect_to_buy':
+        window.location.href = paymentStatus.url;
+        break;
+
+      case 'expired':
+        window.location.href = paymentStatus.url;
+        break;
+
+      case 'checkout_link_open':
+        window.location.href = paymentStatus.url;
+        break;
+
+      default:
+        console.error(paymentStatus);
+        alert('Something went wrong! Please try again later.');
+        break;
+    }
   }
 });
 
@@ -104,9 +123,8 @@ onBeforeMount(async () => {
     </header>
 
     <main>
-      <label class="field field-photo">
-        <img class="preview" :src="$thumbnail(props.id)">
-      </label>
+      <img class="preview" :src="$thumbnail(props.id)">
+
       <p class="price">
         <i class="material-symbols-rounded">euro_symbol</i>
         {{ photo.price }}
@@ -144,14 +162,21 @@ header {
 main {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  padding: 1em;
+  gap: 2rem;
+  padding: 1rem;
   position: relative;
   flex: 1 0 auto;
 
   .loader-icon-overlay {
     background-color: rgba(#181818, .75);
   }
+}
+
+.preview {
+  max-width: 512px;
+  max-height: 60vh;
+  margin: 0 auto;
+  box-shadow: 0 3px 15px rgba(#000, .15);
 }
 
 .price {

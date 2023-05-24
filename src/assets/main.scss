@@ -229,12 +229,14 @@ select {
 
 .text {
   display: inline-flex;
-  gap: 2px;
+  gap: .5rem;
   align-items: center;
 
   > i {
     color: inherit;
-    font-size: 17px;
+    font-size: inherit;
+    width: 24px;
+    text-align: right;
   }
 
   &.small {
@@ -248,6 +250,16 @@ select {
 
 .text-success {
   color: var(--color-akcent);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+
+  > strong {
+    font-weight: bold;
+  }
 }
 
 .dual-field-bar {

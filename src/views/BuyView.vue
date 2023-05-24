@@ -2,7 +2,7 @@
 import defaultPhoto from '@/assets/logo.png';
 import { ref, onBeforeMount } from 'vue';
 import { Auth, API, graphqlOperation, Storage } from 'aws-amplify';
-import { getCheckoutLink, getPhoto } from '@/graphql/queries';
+import { getCheckoutLink as getCheckoutLinkQuery, getPhoto as getPhotoQuery } from '@/graphql/queries';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
 
 const props = defineProps({
@@ -14,30 +14,46 @@ const props = defineProps({
 const photo = ref({});
 const loading = ref(false);
 
-
-async function navigateToCheckout() {
+async function getCheckoutLink(photoId) {
   loading.value = true;
-  const response = await API.graphql({
-    query: getCheckoutLink,
+  const request = await API.graphql({
+    query: getCheckoutLinkQuery,
     variables: {
-      id: props.id
+      id: photoId
     },
     authMode: 'AWS_IAM'
   });
 
-  const json = JSON.parse(response.data.getCheckoutLink);
-  if (json.success) {
-    window.location.href = json.url;
-  } else {
-    console.error(json);
-    alert('Something went wrong! Please try again later.');
+  return JSON.parse(request.data.getCheckoutLink);
+}
+
+async function navigateToCheckout() {
+  const checkoutLink = await getCheckoutLink(props.id);
+  switch (checkoutLink.type) {
+    case 'checkout_link_open':
+      console.info('In progress!');
+      window.location.href = checkoutLink.url;
+      break;
+
+    case 'checkout_link':
+      window.location.href = checkoutLink.url;
+      break;
+
+    case 'already_sold':
+      console.info('Already sold!');
+      break;
+
+    default:
+      console.error(checkoutLink);
+      alert('Something went wrong! Please try again later.');
+      break;
   }
 }
 
 onBeforeMount(async () => {
   if (props.id) {
     const response = await API.graphql({
-      query: getPhoto,
+      query: getPhotoQuery,
       variables: {
         id: props.id
       },
@@ -58,9 +74,9 @@ onBeforeMount(async () => {
     </header>
 
     <main>
-      <label class="field field-photo">
-        <img class="preview" :src="$thumbnail(props.id)">
-      </label>
+
+      <img class="preview" :src="$thumbnail(props.id)">
+
       <p class="price">
         <i class="material-symbols-rounded">euro_symbol</i>
         {{ photo.price }}
@@ -93,14 +109,21 @@ header {
 main {
   display: flex;
   flex-direction: column;
-  gap: 1em;
-  padding: 1em;
+  gap: 2rem;
+  padding: 1rem;
   position: relative;
   flex: 1 0 auto;
 
   .loader-icon-overlay {
     background-color: rgba(#181818, .75);
   }
+}
+
+.preview {
+  max-width: 512px;
+  max-height: 60vh;
+  margin: 0 auto;
+  box-shadow: 0 3px 15px rgba(#000, .15);
 }
 
 .price {
@@ -122,7 +145,6 @@ main {
   align-items: center;
   justify-content: center;
   font-weight: 300;
-  margin-top: 1rem;
 
   > strong {
     font-weight: bold;
