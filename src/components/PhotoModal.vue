@@ -50,6 +50,10 @@ const hasChanged = computed(() => {
   return oldHash.value !== newHash.value;
 });
 
+const soldPrice = computed(() => {
+  return photosStore.prices.find(i => i.unit_amount === formData.price);
+});
+
 function setFile(file) {
   if (!file.target || !file.target.files[0]) {
     return;
@@ -153,11 +157,14 @@ onBeforeMount(async () => {
             </strong>
           </div>
 
-          <div class="info-item">
-            <span>Sold for</span>
-            <strong class="text">
-              <i class="material-symbols-rounded">euro_symbol</i>{{ formData.price }}
-            </strong>
+          <div class="field field-prices">
+            <label class="field field-choice">
+              <input type="radio" name="price" :value="soldPrice.unit_amount" checked/>
+              <div>
+                <span>{{ soldPrice.product.name }}</span>
+                <span>{{ $formatPrice(soldPrice.unit_amount / 100) }}</span>
+              </div>
+            </label>
           </div>
         </template>
 
