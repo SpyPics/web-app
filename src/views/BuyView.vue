@@ -51,6 +51,7 @@ async function navigateToCheckout() {
 }
 
 onBeforeMount(async () => {
+  loading.value = true;
   if (props.id) {
     const response = await API.graphql({
       query: getPhotoQuery,
@@ -61,9 +62,9 @@ onBeforeMount(async () => {
     });
 
     photo.value = response.data.getPhoto;
-
-    console.log(response);
   }
+
+  loading.value = false;
 });
 
 </script>
@@ -79,12 +80,12 @@ onBeforeMount(async () => {
 
       <p class="price">
         <i class="material-symbols-rounded">euro_symbol</i>
-        {{ photo.price }}
+        {{ $formatPrice(photo.price / 100) || "-,--" }}
       </p>
 
       <p class="seller">
         <strong>Seller</strong>
-        {{ photo.user?.username }}
+        {{ photo.user?.username || '...' }}
       </p>
 
       <div class="actions-bar">

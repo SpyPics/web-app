@@ -47,6 +47,8 @@ type Query {
   getPaymentStatus(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
 
   downloadImage(id: String!): String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
+
+  getPriceList: String @function(name: "PaymentService-${env}") @auth(rules: [{ allow: public, provider: iam }, { allow: private, provider: iam }])
 }
 
 type Mutation {

@@ -118,22 +118,22 @@ onBeforeMount(async () => {
 </script>
 <template>
   <article>
-    <header>
-      <h1>Successful</h1>
-    </header>
-
     <main>
+      <h1>Congratulations!</h1>
+
       <img class="preview" :src="$thumbnail(props.id)">
 
-      <p class="price">
-        <i class="material-symbols-rounded">euro_symbol</i>
-        {{ photo.price }}
-      </p>
+<!--      <p class="price">-->
+<!--        <i class="material-symbols-rounded">euro_symbol</i>-->
+<!--        {{ $formatPrice(photo.price / 100) || "-,&#45;&#45;" }}-->
+<!--      </p>-->
 
-      <p class="seller">
-        <strong>Seller</strong>
-        {{ photo.user?.username }}
-      </p>
+<!--      <p class="seller">-->
+<!--        <strong>Seller</strong>-->
+<!--        {{ photo.user?.username }}-->
+<!--      </p>-->
+
+      <h2>Here is your photo, enjoy!</h2>
 
       <!--      <a href="">-->
       <!--        This photo is available for purchase-->
@@ -155,20 +155,28 @@ article {
   height: 100%;
 }
 
-header {
-  padding: 1em;
-}
-
 main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 1rem;
+  padding: 4rem 1rem 1rem;
   position: relative;
   flex: 1 0 auto;
+  color: var(--vt-c-white);
 
   .loader-icon-overlay {
     background-color: rgba(#181818, .75);
+  }
+
+  > h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  > h2 {
+    text-align: center;
   }
 }
 

@@ -75,7 +75,7 @@ onBeforeMount(() => {
         <div class="actions">
           <button class="btn" type="submit">
             <i class="material-symbols-rounded">done</i>
-            dine
+            done
           </button>
         </div>
       </header>

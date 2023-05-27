@@ -76,7 +76,6 @@ function onPriceBlur() {
 async function save(event) {
   event.preventDefault();
   loading.value = true;
-
   if (formData.id) {
     if (hasChanged) {
       await photosStore.updatePhoto(formData);
@@ -94,7 +93,6 @@ async function deletePhoto(event) {
 
   if (window.confirm('This is an irreversible action. Are you sure?')) {
     loading.value = true;
-
     if (formData.id) {
       await photosStore.deletePhoto(formData.id);
     }
@@ -104,10 +102,14 @@ async function deletePhoto(event) {
   }
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  loading.value = true;
+  await photosStore.fetchPriceList();
   if (props.id) {
-    photosStore.fetchPhotoById(props.id);
+    await photosStore.fetchPhotoById(props.id);
   }
+
+  loading.value = false;
 });
 </script>
 
@@ -160,13 +162,23 @@ onBeforeMount(() => {
         </template>
 
         <template v-else>
-          <label class="field field-price">
-            <span>Price</span>
-            <span class="input">
-            <i class="material-symbols-rounded">euro_symbol</i>
-            <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">
-          </span>
-          </label>
+          <!--          <label class="field field-price">-->
+          <!--            <span>Price</span>-->
+          <!--            <span class="input">-->
+          <!--              <i class="material-symbols-rounded">euro_symbol</i>-->
+          <!--              <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">-->
+          <!--            </span>-->
+          <!--          </label>-->
+
+          <div class="field field-prices">
+            <label class="field field-choice" v-for="item in photosStore.prices">
+              <input type="radio" name="price" v-model="formData.price" :value="item.unit_amount"/>
+              <div>
+                <span>{{ item.product.name }}</span>
+                <span>{{ $formatPrice(item.unit_amount / 100) }}</span>
+              </div>
+            </label>
+          </div>
 
           <label class="field field-checkbox"
                  :class="formData.ready_for_sell ? formData.price ? 'valid' : 'invalid' : ''">
@@ -188,6 +200,7 @@ onBeforeMount(() => {
               The monetization must be activated
             </div>
           </label>
+
 
           <label v-if="formData.updatedAt" class="info">
             Created at

@@ -5,7 +5,7 @@ import {
   updatePhoto as updatePhotoMutation,
   deletePhoto as deletePhotoMutation
 } from '@/graphql/mutations';
-import { getPhoto } from '@/graphql/queries';
+import { getPhoto, getPriceList } from '@/graphql/queries';
 import { v4 as uuidv4 } from 'uuid';
 import awsExports from '@/aws-exports';
 
@@ -14,7 +14,8 @@ export const usePhotosStore = defineStore('photos', {
   state: () => {
     return {
       photos: [],
-      activePhoto: null
+      activePhoto: null,
+      prices: []
     };
   },
   getters: {
@@ -173,6 +174,22 @@ export const usePhotosStore = defineStore('photos', {
 
       this.$patch((state) => {
         state.activePhoto = response.data.getPhoto;
+      });
+    },
+
+    async fetchPriceList() {
+      if (this.prices.length) {
+        return;
+      }
+
+      const response = await API.graphql({
+        query: getPriceList,
+        authMode: 'AWS_IAM'
+      });
+
+      this.$patch((state) => {
+        const json = JSON.parse(response.data.getPriceList);
+        state.prices = json.data.sort((a, b) => (a.unit_amount > b.unit_amount) ? 1 : -1);;
       });
     },
 

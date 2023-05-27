@@ -58,7 +58,7 @@ onMounted(() => {
 
     <div class="price">
       <i class="material-symbols-rounded">euro_symbol</i>
-      <span>{{ photo.price }}</span>
+      <span>{{ $formatPrice(photo.price / 100) }}</span>
     </div>
   </div>
 </template>

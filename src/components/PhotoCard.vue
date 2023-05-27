@@ -62,7 +62,7 @@ function navigateToEditModal() {
 
     <div class="price">
       <i class="material-symbols-rounded">euro_symbol</i>
-      {{ photo.price || '0,00' }}
+      {{ $formatPrice(photo.price / 100) || '0,00' }}
     </div>
 
     <p v-if="photo.sold_at" class="text text-success">

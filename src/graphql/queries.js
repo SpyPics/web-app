@@ -401,3 +401,8 @@ export const downloadImage = /* GraphQL */ `
     downloadImage(id: $id)
   }
 `;
+export const getPriceList = /* GraphQL */ `
+  query GetPriceList {
+    getPriceList
+  }
+`;

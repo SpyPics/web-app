@@ -299,8 +299,9 @@ async function getCheckoutLink(env, args, request) {
     }
   }
 
-  const photoPrice = (photo.price * 100);
+  const photoPrice = photo.price;
   const fivePercent = photoPrice * 0.05;
+  const thirtyPercent = photoPrice * 0.30;
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -315,7 +316,7 @@ async function getCheckoutLink(env, args, request) {
       },
     ],
     payment_intent_data: {
-      application_fee_amount: fivePercent,
+      application_fee_amount: Math.ceil(thirtyPercent),
       transfer_data: {
         destination: photo.user.stripe_account_id,
       },
@@ -536,6 +537,21 @@ async function downloadImage(env, args, request) {
   }
 }
 
+async function getPriceList(env, args, request) {
+  const stripe = require('stripe')(env.STRIPE_API_KEY);
+  try {
+    const prices = await stripe.prices.list({
+      limit: 50,
+      expand: ['data.product'],
+    });
+
+    return JSON.stringify(prices);
+  } catch (error) {
+    console.error(error);
+    return JSON.stringify(error);
+  }
+}
+
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
@@ -565,6 +581,9 @@ exports.handler = async (event) => {
 
     case 'downloadImage':
       return await downloadImage(env, event.arguments, event.request);
+
+    case 'getPriceList':
+      return await getPriceList(env, event.arguments, event.request);
 
     default:
       return JSON.stringify({

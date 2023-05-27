@@ -39,10 +39,10 @@ onMounted(() => {
 <style scoped lang="scss">
 main {
   display: grid;
-  gap: .5em;
+  gap: 2rem;
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
-  padding: 1em .5em;
+  padding: 1rem .5rem;
 }
 
 .not-active {
