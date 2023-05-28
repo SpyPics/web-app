@@ -31,7 +31,7 @@ watch(formData, (input) => {
   }
 });
 
-const {activePhoto} = storeToRefs(photosStore);
+const {activePhoto, uploading, uploadProgress} = storeToRefs(photosStore);
 watch(activePhoto, (data) => {
   Object.assign(formData, data);
   formData.file = true;
@@ -51,7 +51,10 @@ const hasChanged = computed(() => {
 });
 
 const soldPrice = computed(() => {
-  return photosStore.prices.find(i => i.unit_amount === formData.price);
+  return photosStore.prices.find(i => i.unit_amount === formData.price) || {
+    unit_amount: activePhoto.price,
+    product: {name: 'Custom'}
+  };
 });
 
 function setFile(file) {
@@ -165,6 +168,8 @@ onBeforeMount(async () => {
                 <span>{{ $formatPrice(soldPrice.unit_amount / 100) }}</span>
               </div>
             </label>
+            <div></div>
+            <div></div>
           </div>
         </template>
 
@@ -225,7 +230,9 @@ onBeforeMount(async () => {
         </div>
 
         <transition name="fade" :duration="150">
-          <loader-icon-overlay v-show="loading"></loader-icon-overlay>
+          <loader-icon-overlay v-show="loading"
+                               :show-progress="uploading"
+                               :progress-percentage="uploadProgress"></loader-icon-overlay>
         </transition>
       </main>
     </div>

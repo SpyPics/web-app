@@ -316,9 +316,8 @@ select {
 
   &.field-prices {
     display: grid;
-    grid-template-columns: repeat( auto-fit, minmax(280px, 360px));
+    grid-template-columns: repeat( auto-fit, minmax(280px, 1fr));
     grid-auto-flow: dense;
-    justify-content: space-around;
 
     > label {
       > input {
@@ -332,7 +331,6 @@ select {
           color: var(--vt-c-white);
 
           &:before {
-            //color: var(--color-akcent);
             content: 'task_alt';
           }
         }

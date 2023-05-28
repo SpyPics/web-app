@@ -15,7 +15,9 @@ export const usePhotosStore = defineStore('photos', {
     return {
       photos: [],
       activePhoto: null,
-      prices: []
+      prices: [],
+      uploading: false,
+      uploadProgress: 0
     };
   },
   getters: {
@@ -50,16 +52,39 @@ export const usePhotosStore = defineStore('photos', {
 
       //s3 bucket storage add file to it
       try {
+        this.$patch((state) => {
+          state.uploading = true;
+          state.uploadProgress = 0;
+          state.hasChanged = true;
+        });
+
         await Storage.put(key, file, {
           level: 'public',
           contentType: mimeType,
-          metadata: {user_id: user.username, photo_id: photoId}
+          metadata: {user_id: user.username, photo_id: photoId},
+          progressCallback: (progress) => {
+            this.$patch((state) => {
+              state.uploadProgress = Number.parseFloat(((progress.loaded * 100) / progress.total).toFixed(1));
+              state.hasChanged = true;
+            });
+          },
         });
+
+        this.$patch((state) => {
+          state.uploading = false;
+          state.hasChanged = true;
+        });
+
         const response = await API.graphql(graphqlOperation(createPhotoMutation, {input: inputData}));
         this.$createPatch(response.data.createPhoto);
 
         return Promise.resolve('success');
       } catch (error) {
+        this.$patch((state) => {
+          state.uploading = false;
+          state.uploadProgress = 0;
+          state.hasChanged = true;
+        });
         console.log('createPhoto error', error);
         return Promise.reject(error);
       }
@@ -189,7 +214,8 @@ export const usePhotosStore = defineStore('photos', {
 
       this.$patch((state) => {
         const json = JSON.parse(response.data.getPriceList);
-        state.prices = json.data.sort((a, b) => (a.unit_amount > b.unit_amount) ? 1 : -1);;
+        state.prices = json.data.sort((a, b) => (a.unit_amount > b.unit_amount) ? 1 : -1);
+        ;
       });
     },
 
