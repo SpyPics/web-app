@@ -72,13 +72,14 @@ async function activate() {
     loading.value = true;
     const data = await profileStore.activateStripeExpress();
     if (!data.url) {
+      loading.value = false;
       console.log(data);
     } else if (data.type === 'login_link') {
+      loading.value = false;
       window.open(data.url, '_blank');
     } else {
       window.location.href = data.url;
     }
-    loading.value = false;
   }
 }
 

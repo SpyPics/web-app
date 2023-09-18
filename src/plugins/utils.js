@@ -42,6 +42,7 @@ export default {
     app.config.globalProperties.$formatDate = $formatDate;
 
     app.provide('thumbnail', $thumbnail);
+    app.provide('formatPrice', $formatPrice);
     app.provide('formatDate', $formatDate);
   }
 };

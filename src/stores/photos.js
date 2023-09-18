@@ -46,7 +46,7 @@ export const usePhotosStore = defineStore('photos', {
           region,
           bucket
         },
-        price: data.price ? data.price : 0,
+        price: data.price ? (data.price * 100) : 0,
         ready_for_sell: data.ready_for_sell
       };
 
@@ -93,7 +93,7 @@ export const usePhotosStore = defineStore('photos', {
       const inputData = {
         id: data.id,
         original: data.original,
-        price: data.price ? data.price : 0,
+        price: data.price ? (data.price * 100) : 0,
         ready_for_sell: data.ready_for_sell
       };
 
@@ -199,6 +199,9 @@ export const usePhotosStore = defineStore('photos', {
 
       this.$patch((state) => {
         state.activePhoto = response.data.getPhoto;
+        if (state.activePhoto.price > 0) {
+          state.activePhoto.price = state.activePhoto.price / 100;
+        }
       });
     },
 
@@ -215,7 +218,6 @@ export const usePhotosStore = defineStore('photos', {
       this.$patch((state) => {
         const json = JSON.parse(response.data.getPriceList);
         state.prices = json.data.sort((a, b) => (a.unit_amount > b.unit_amount) ? 1 : -1);
-        ;
       });
     },
 

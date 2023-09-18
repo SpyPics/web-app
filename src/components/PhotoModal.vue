@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, watch, onBeforeMount, nextTick } from 'vue';
+import { ref, reactive, computed, watch, onBeforeMount, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { usePhotosStore } from '@/stores/photos';
@@ -111,7 +111,7 @@ async function deletePhoto(event) {
 
 onBeforeMount(async () => {
   loading.value = true;
-  await photosStore.fetchPriceList();
+  // await photosStore.fetchPriceList();
   if (props.id) {
     await photosStore.fetchPhotoById(props.id);
   }
@@ -174,23 +174,23 @@ onBeforeMount(async () => {
         </template>
 
         <template v-else>
-          <!--          <label class="field field-price">-->
-          <!--            <span>Price</span>-->
-          <!--            <span class="input">-->
-          <!--              <i class="material-symbols-rounded">euro_symbol</i>-->
-          <!--              <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">-->
-          <!--            </span>-->
-          <!--          </label>-->
+          <label class="field field-price">
+            <span>Price</span>
+            <span class="input">
+              <i class="material-symbols-rounded">euro_symbol</i>
+              <input type="number" step="any" v-model="formData.price" placeholder="0.00" @blur="onPriceBlur">
+            </span>
+          </label>
 
-          <div class="field field-prices">
-            <label class="field field-choice" v-for="item in photosStore.prices">
-              <input type="radio" name="price" v-model="formData.price" :value="item.unit_amount"/>
-              <div>
-                <span>{{ item.product.name }}</span>
-                <span>{{ $formatPrice(item.unit_amount / 100) }}</span>
-              </div>
-            </label>
-          </div>
+          <!--          <div class="field field-prices">-->
+          <!--            <label class="field field-choice" v-for="item in photosStore.prices">-->
+          <!--              <input type="radio" name="price" v-model="formData.price" :value="item.unit_amount"/>-->
+          <!--              <div>-->
+          <!--                <span>{{ item.product.name }}</span>-->
+          <!--                <span>{{ $formatPrice(item.unit_amount / 100) }}</span>-->
+          <!--              </div>-->
+          <!--            </label>-->
+          <!--          </div>-->
 
           <label class="field field-checkbox"
                  :class="formData.ready_for_sell ? formData.price ? 'valid' : 'invalid' : ''">

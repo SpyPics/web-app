@@ -2,6 +2,7 @@
 import { onMounted, onBeforeMount, ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
 import LoaderIconOverlay from '@/components/LoaderIconOverlay.vue';
+import defaultPhoto from '@/assets/logo.png';
 
 const $thumbnail = inject('thumbnail');
 const router = useRouter();
@@ -53,6 +54,7 @@ onMounted(() => {
       <Transition name="fade">
         <img v-if="thumbnail" :src="thumbnail"/>
       </Transition>
+      <img class="watermark" :src="defaultPhoto"/>
       <loader-icon-overlay v-show="!thumbnail"></loader-icon-overlay>
     </div>
 
@@ -94,7 +96,20 @@ onMounted(() => {
     margin: 0 auto;
     background-color: #000;
     display: block;
+
+    &.watermark {
+      position: absolute;
+      width: 50%;
+      aspect-ratio: 1 / 1;
+      bottom: 0;
+      right: 0;
+      z-index: 10;
+      background-color: transparent;
+      opacity: .5;
+    }
   }
+
+
 }
 
 .price {
